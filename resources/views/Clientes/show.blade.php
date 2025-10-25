@@ -1,0 +1,77 @@
+@extends('layouts.app')
+
+@section('title', 'Detalhes do Cliente')
+@section('header', 'Detalhes do Cliente: ' . $cliente->nome)
+
+@section('content')
+
+<div class="container mt-4">
+    <!-- Cartão principal com sombreamento para destaque -->
+    <div class="card p-4 shadow-lg">
+
+        <h2 class="text-primary mb-4">Detalhes do Cliente: {{ $cliente->nome }}</h2>
+
+        <!-- Botões de Ação -->
+        <div class="mb-4 d-flex justify-content-between">
+            <a href="{{ route('clientes.index') }}" class="btn btn-sm btn-outline-secondary">
+                ← Voltar para a Lista
+            </a>
+            <div>
+                <a href="{{ route('clientes.edit', $cliente->id) }}" class="btn btn-warning me-2">Editar</a>
+                
+                <!-- Formulário para Excluir (usando d-inline para manter o alinhamento) -->
+                <form action="{{ route('clientes.destroy', $cliente->id) }}" method="POST" class="d-inline">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir este cliente?')">Excluir</button>
+                </form>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <!-- COLUNA 1: DADOS PESSOAIS E CONTATO -->
+            <div class="col-md-6 mb-4">
+                <h5 class="mb-3 text-info border-bottom pb-2">Dados Pessoais/Contato</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>ID:</strong> {{ $cliente->id }}</li>
+                    <li class="list-group-item"><strong>Nome/Razão Social:</strong> {{ $cliente->nome }}</li>
+                    <li class="list-group-item"><strong>CPF/CNPJ:</strong> {{ $cliente->cpf_cnpj ?? 'Não informado' }}</li>
+                    <li class="list-group-item"><strong>Telefone:</strong> {{ $cliente->telefone ?? 'Não informado' }}</li>
+                    <li class="list-group-item"><strong>E-mail:</strong> {{ $cliente->email ?? 'Não informado' }}</li>
+                </ul>
+            </div>
+
+            <!-- COLUNA 2: DADOS DE ENDEREÇO SEPARADOS -->
+            <div class="col-md-6 mb-4">
+                <h5 class="mb-3 text-info border-bottom pb-2">Endereço Detalhado</h5>
+                <!-- Exibindo todos os campos de endereço separadamente -->
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>CEP:</strong> {{ $cliente->cep ?? 'Não informado' }}</li>
+                    <li class="list-group-item"><strong>Rua:</strong> {{ $cliente->rua ?? 'Não informado' }}</li>
+                    <li class="list-group-item"><strong>Número:</strong> {{ $cliente->numero ?? 'S/N' }}</li>
+                    <li class="list-group-item"><strong>Bairro:</strong> {{ $cliente->bairro ?? 'Não informado' }}</li>
+                    <li class="list-group-item"><strong>Cidade:</strong> {{ $cliente->cidade ?? 'Não informado' }}</li>
+                    <li class="list-group-item"><strong>Estado (UF):</strong> {{ $cliente->estado ?? 'Não informado' }}</li>
+                    <li class="list-group-item"><strong>Complemento:</strong> {{ $cliente->complemento ?? 'Nenhum' }}</li>
+                </ul>
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <!-- Timestamps -->
+        <div class="row text-muted small">
+            <div class="col-md-6">
+                <strong>Criado em:</strong> {{ $cliente->created_at->format('d/m/Y H:i:s') }}
+            </div>
+            <div class="col-md-6">
+                <strong>Última Atualização:</strong> {{ $cliente->updated_at->format('d/m/Y H:i:s') }}
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@endsection
