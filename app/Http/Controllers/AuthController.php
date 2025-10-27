@@ -24,7 +24,7 @@ class AuthController extends Controller
 
         if(Auth::attempt($credentials)){
             $request->session()->regenerate();
-            return redirect()->intended('/produtos');
+            return redirect()->intended('/home');
         }
 
         return back()->withErrors([
@@ -34,7 +34,7 @@ class AuthController extends Controller
 
     }
 
-    public function logout(){
+    public function logout(Request $request){
         
         Auth::logout();
         $request->session()->invalidate();

@@ -11,19 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('products', function (Blueprint $table) {
-            $table->id(); // Este campo é o sequencial automático (1, 2, 3...)
-            
-            // REMOVIDO: $table->string('codigo')->unique(); // O ID fará este papel
-            
-            // Campos restantes
-            $table->string('nome');            // Nome
-            $table->text('descricao')->nullable(); // Descrição
-            $table->string('unidade_medida', 10); // Unidade de Medida (UN, PC, etc.)
-            $table->decimal('preco_custo', 10, 2); // Preço de Custo
-            $table->decimal('preco_venda', 10, 2); // Preço de Venda
-            $table->integer('estoque_minimo')->default(0); // Estoque Mínimo
-
+        Schema::create('produtos', function (Blueprint $table) {
+            $table->id();
+            $table->string('nome');
+            $table->text('descricao');
+            $table->string('unidade_medida', 10);
+            $table->decimal('preco_custo', 10, 2);
+            $table->decimal('preco_venda', 10, 2);
+            $table->integer('estoque_minimo')->default(0);
             $table->timestamps();
         });
     }
@@ -33,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('produtos');
     }
 };
