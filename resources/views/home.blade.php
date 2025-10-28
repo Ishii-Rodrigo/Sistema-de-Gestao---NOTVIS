@@ -66,7 +66,23 @@
             </a>
         </div>
 
-        {{-- MÓDULO 2: Estoque (Produtos) --}}
+        {{-- MÓDULO NOVO: Veículos (INCLUSÃO SOLICITADA) --}}
+        <div class="col-md-4 col-lg-3">
+            <a href="{{ route('veiculos.index') }}" class="text-decoration-none">
+                <div class="card card-module shadow-sm h-100 p-4 text-center">
+                    <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                        {{-- Cor e ícone para Veículos --}}
+                        <div class="card-icon" style="background-color: #0056b3;"> 
+                            <i class="bi bi-car-front-fill"></i>
+                        </div>
+                        <h5 class="card-title fw-bold">Veículos</h5>
+                        <p class="card-text text-muted">Cadastro e gestão de veículos</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        {{-- MÓDULO 2: Estoque (Produtos) (LIGAÇÃO CORRIGIDA) --}}
         <div class="col-md-4 col-lg-3">
             <a href="{{ route('produtos.index') }}" class="text-decoration-none">
                 <div class="card card-module shadow-sm h-100 p-4 text-center">
@@ -143,7 +159,7 @@
 
     </div>
 
-    {{-- Rodapé Fixo (Replicando a estrutura do login.blade.php para ser fixo) --}}
+    {{-- Rodapé Fixo (Mantido para uniformidade) --}}
     <div class="w-100 position-fixed bottom-0 start-0 bg-primary" style="height: 50px; background-image: linear-gradient(to right, #007bff, #00c6ff);">
         <div class="container text-center text-white p-2">
             <span class="fw-bold">© 2025 - NOTVIS. Todos os direitos reservados.</span>

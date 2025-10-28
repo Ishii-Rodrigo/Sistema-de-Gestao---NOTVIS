@@ -6,24 +6,26 @@
 @section('content')
 
 <div class="container mt-4">
-    <!-- Cartão principal com sombreamento para destaque -->
     <div class="card p-4 shadow-lg">
 
         <h2 class="text-primary mb-4">Detalhes do Cliente: {{ $cliente->nome }}</h2>
 
-        <!-- Botões de Ação -->
         <div class="mb-4 d-flex justify-content-between">
-            <a href="{{ route('clientes.index') }}" class="btn btn-sm btn-outline-secondary">
-                ← Voltar para a Lista
+            <a href="{{ route('clientes.index') }}" class="btn btn-sm btn-outline-primary" title="Voltar para a Lista">
+                <i class="bi bi-arrow-left-circle-fill"></i> Voltar para a Lista
             </a>
+            
             <div>
-                <a href="{{ route('clientes.edit', $cliente->id) }}" class="btn btn-warning me-2">Editar</a>
+                <a href="{{ route('clientes.edit', $cliente->id) }}" class="btn btn-sm btn-warning me-2" title="Editar Cliente">
+                    <i class="bi bi-pencil-square"></i> Editar
+                </a>
                 
-                <!-- Formulário para Excluir (usando d-inline para manter o alinhamento) -->
                 <form action="{{ route('clientes.destroy', $cliente->id) }}" method="POST" class="d-inline">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir este cliente?')">Excluir</button>
+                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja excluir este cliente?')" title="Excluir Cliente">
+                        <i class="bi bi-trash-fill"></i> Excluir
+                    </button>
                 </form>
             </div>
         </div>
@@ -31,7 +33,6 @@
         <hr>
 
         <div class="row">
-            <!-- COLUNA 1: DADOS PESSOAIS E CONTATO -->
             <div class="col-md-6 mb-4">
                 <h5 class="mb-3 text-info border-bottom pb-2">Dados Pessoais/Contato</h5>
                 <ul class="list-group list-group-flush">
@@ -43,10 +44,8 @@
                 </ul>
             </div>
 
-            <!-- COLUNA 2: DADOS DE ENDEREÇO SEPARADOS -->
             <div class="col-md-6 mb-4">
                 <h5 class="mb-3 text-info border-bottom pb-2">Endereço Detalhado</h5>
-                <!-- Exibindo todos os campos de endereço separadamente -->
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item"><strong>CEP:</strong> {{ $cliente->cep ?? 'Não informado' }}</li>
                     <li class="list-group-item"><strong>Rua:</strong> {{ $cliente->rua ?? 'Não informado' }}</li>
@@ -61,7 +60,6 @@
 
         <hr class="my-4">
 
-        <!-- Timestamps -->
         <div class="row text-muted small">
             <div class="col-md-6">
                 <strong>Criado em:</strong> {{ $cliente->created_at->format('d/m/Y H:i:s') }}

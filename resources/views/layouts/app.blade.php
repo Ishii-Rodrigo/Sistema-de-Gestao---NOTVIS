@@ -64,30 +64,7 @@
                      style="height: 50px;">
             </a>
             
-            @if (Auth::check())
-                {{-- NAV BAR COM MENU (Para telas internas) --}}
-                @if (!$isHome)
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarNav">
-                        <ul class="navbar-nav me-auto">
-                            {{-- DROPDOWN CADASTROS --}}
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownCadastros" role="button" data-bs-toggle="dropdown" aria-expanded="false">Cadastros</a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdownCadastros">
-                                    <li><a class="dropdown-item" href="{{ route('clientes.index') }}">Clientes</a></li>
-                                    <li><a class="dropdown-item" href="#">Fornecedores</a></li> 
-                                    <li><a class="dropdown-item" href="{{ route('produtos.index') }}">Produtos</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('veiculos.index') }}">Veículos</a></li>
-                                </ul>
-                            </li>
-                            <li class="nav-item"><a class="nav-link" href="#">Venda/OS</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#">Relatórios</a></li>
-                        </ul>
-                    </div>
-                @endif
-                
+            @if (Auth::check())                
                 {{-- Bloco de Usuário (Sempre presente quando logado) --}}
                 <form action="{{ route('logout') }}" method="post" class="d-flex align-items-center me-3">
                     @csrf

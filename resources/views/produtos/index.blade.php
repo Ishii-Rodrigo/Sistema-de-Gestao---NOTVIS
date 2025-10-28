@@ -4,55 +4,71 @@
 @section('header', 'Lista de Produtos')
 
 @section('content')
-<h1>Lista de Produtos</h1>
-<a href="{{ route('produtos.create') }}">Novo Produto</a>
-
-@if (session('success'))
-    <div style="color: green; margin-top: 15px;">
-        {{ session('success') }}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        
+        <div class="d-flex align-items-center">
+            <a href="{{ route('home') }}" class="btn btn-sm btn-outline-primary me-3" title="Voltar ao Menu Principal">
+                <i class="bi bi-arrow-left-circle-fill"></i> Voltar
+            </a>
+            
+            <h2 class="text-primary mb-0">Lista de Produtos</h2>
+        </div>
+        
+        <a href="{{ route('produtos.create') }}" class="btn btn-sm btn-success" title="Cadastrar Novo Produto">
+            <i class="bi bi-plus-circle-fill"></i> Novo Produto
+        </a>
     </div>
-@endif
 
-<table border="1" style="width:100%; margin-top: 15px;">
-    <thead>
-        <tr>
-            <th>Código</th>
-            <th>Nome</th>
-            <th>Un. Medida</th>
-            <th>Preço Venda</th>
-            <th>Estoque Mínimo</th>
-            <th>Ações</th> <!-- Nova coluna para botões -->
-        </tr>
-    </thead>
-    <tbody>
-        @foreach($produtos as $produto)
-            <tr>
-                <!-- Usa o Acessor do Model para mostrar o Código formatado (001, 002...) -->
-                <td>{{ $produto->codigo }}</td> 
-                <td>{{ $produto->nome }}</td>
-                <td>{{ $produto->unidade_medida }}</td>
-                <td>R$ {{ number_format($produto->preco_venda, 2, ',', '.') }}</td>
-                <td>{{ $produto->estoque_minimo }}</td>
-                <td>
-                    <!-- Botão Editar -->
-                    <a href="{{ route('produtos.edit', $produto->id) }}" 
-                       style="background-color: #008CBA; color: white; padding: 5px 10px; text-decoration: none; border-radius: 3px;">
-                        Editar
-                    </a>
-                    
-                    <!-- Botão Deletar (com formulário) -->
-                    <form action="{{ route('produtos.destroy', $produto->id) }}" method="POST" style="display:inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" 
-                                style="background-color: #f44336; color: white; padding: 5px 10px; border: none; cursor: pointer; border-radius: 3px;"
-                                onclick="return confirm('Tem certeza que deseja deletar o produto {{ $produto->codigo }} - {{ $produto->nome }}?');">
-                            Deletar
-                        </button>
-                    </form>
-                </td>
-            </tr>
-        @endforeach
-    </tbody>
-</table>
+    @if (session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+
+    @if ($produtos->isEmpty())
+        <div class="alert alert-info">Nenhum produto encontrado.</div>
+    @else
+        <div class="table-responsive">
+            <table class="table table-striped table-hover shadow-sm">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Código</th>
+                        <th>Nome</th>
+                        <th>Un. Medida</th>
+                        <th>Preço Venda</th>
+                        <th>Estoque Mínimo</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($produtos as $produto)
+                        <tr>
+                            <td>{{ $produto->codigo }}</td> 
+                            <td>{{ $produto->nome }}</td>
+                            <td>{{ $produto->unidade_medida }}</td>
+                            <td>R$ {{ number_format($produto->preco_venda, 2, ',', '.') }}</td>
+                            <td>{{ $produto->estoque_minimo }}</td>
+                            <td>
+                                <a href="{{ route('produtos.show', $produto->id) }}" class="btn btn-sm btn-info text-white" title="Ver Detalhes">
+                                    <i class="bi bi-eye-fill"></i>
+                                </a>
+                                
+                                <a href="{{ route('produtos.edit', $produto->id) }}" class="btn btn-sm btn-warning" title="Editar Produto">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                
+                                <form action="{{ route('produtos.destroy', $produto->id) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Confirmar exclusão de {{ $produto->nome }}?')" title="Excluir Produto">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    @endif
+</div>
 @endsection

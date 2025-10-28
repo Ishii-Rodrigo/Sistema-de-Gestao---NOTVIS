@@ -10,7 +10,7 @@
 
         <h2 class="text-primary mb-4">Editar Veículo: {{ $veiculo->placa }}</h2>
         <a href="{{ route('veiculos.show', $veiculo->id) }}" class="btn btn-sm btn-outline-secondary mb-3">
-            ← Voltar para Detalhes
+            <i class="bi bi-arrow-left-circle"></i> Voltar para Detalhes
         </a>
 
         @if($errors->any())
@@ -35,33 +35,34 @@
                     <select name="cliente_id" id="cliente_id" class="form-control" required>
                         <option value="">Selecione um Cliente</option>
                         @foreach ($clientes as $cliente)
-                            <option value="{{ $cliente->id }}" 
-                                {{ old('cliente_id', $veiculo->cliente_id) == $cliente->id ? 'selected' : '' }}>
+                            <option value="{{ $cliente->id }}" {{ old('cliente_id', $veiculo->cliente_id) == $cliente->id ? 'selected' : '' }}>
                                 {{ $cliente->nome }}
                             </option>
                         @endforeach
                     </select>
                     @error('cliente_id') <div class="text-danger small">{{ $message }}</div> @enderror
                 </div>
-
-                {{-- PLACA --}}
-                <div class="col-md-3 form-group">
-                    <label for="placa" class="form-label">Placa (*)</label>
-                    <input type="text" name="placa" id="placa" class="form-control" 
-                           value="{{ old('placa', $veiculo->placa) }}" maxlength="7" required>
-                    @error('placa') <div class="text-danger small">{{ $message }}</div> @enderror
-                </div>
             </div>
 
             <div class="row mb-4">
-                {{-- MARCA --}}
+                {{-- PLACA --}}
                 <div class="col-md-4 form-group">
+                    <label for="placa" class="form-label">Placa (*)</label>
+                    <input type="text" name="placa" id="placa" class="form-control" 
+                           value="{{ old('placa', $veiculo->placa) }}" required maxlength="8">
+                    @error('placa') <div class="text-danger small">{{ $message }}</div> @enderror
+                </div>
+
+                {{-- MARCA --}}
+                <div class="col-md-5 form-group">
                     <label for="marca" class="form-label">Marca (*)</label>
                     <input type="text" name="marca" id="marca" class="form-control" 
                            value="{{ old('marca', $veiculo->marca) }}" required>
                     @error('marca') <div class="text-danger small">{{ $message }}</div> @enderror
                 </div>
-                
+            </div>
+
+            <div class="row mb-4">
                 {{-- MODELO --}}
                 <div class="col-md-5 form-group">
                     <label for="modelo" class="form-label">Modelo (*)</label>
@@ -89,8 +90,12 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-success">Salvar Alterações</button>
+            {{-- MODIFICAÇÃO: Botão de Submissão com Ícone --}}
+            <button type="submit" class="btn btn-success">
+                <i class="bi bi-check-circle-fill"></i> Salvar Alterações
+            </button>
         </form>
+
     </div>
 </div>
 

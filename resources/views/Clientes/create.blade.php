@@ -5,22 +5,13 @@
 
 @section('content')
 
-<!--
-    Esta View implementa a separação dos campos de endereço (CEP, Rua, Número, Bairro, Cidade, Estado e Complemento)
-    em inputs individuais e os organiza em colunas usando classes de grid (presume-se Bootstrap ou Tailwind/similar
-    carregado no 'layouts.app').
-
-    Se a view ainda estiver dando erro, verifique:
-    1. Se você tem o Model Cliente.php.
-    2. Se você executou 'php artisan migrate:fresh' (para recriar a tabela com os campos CEP, Rua, etc. separados).
--->
-
 <div class="container mt-4">
     <div class="card p-4 shadow-sm">
 
-        <h2 class="text-primary mb-4">Cadastrar Novo Cliente</h2>
-        <a href="{{ route('clientes.index') }}" class="btn btn-sm btn-outline-secondary mb-3">
-            ← Voltar para a Lista
+        <h2 class="text-primary mb-4">Novo Cliente</h2>
+        
+        <a href="{{ route('clientes.index') }}" class="btn btn-sm btn-outline-primary mb-3" title="Voltar para a Lista">
+            <i class="bi bi-arrow-left-circle-fill"></i> Voltar para a Lista
         </a>
 
         @if($errors->any())
@@ -36,8 +27,8 @@
         <form action="{{ route('clientes.store') }}" method="POST">
             @csrf
 
-            <!-- DADOS PESSOAIS/CONTATO -->
             <div class="row mb-4">
+                <h5 class="mb-3 text-info">Dados Pessoais</h5>
                 <div class="col-md-6 form-group">
                     <label for="nome" class="form-label">Nome/Razão Social (*)</label>
                     <input type="text" name="nome" id="nome" class="form-control" value="{{ old('nome') }}" required>
@@ -60,9 +51,8 @@
             </div>
             
             <hr class="my-4">
-            <h5 class="mb-3 text-info">Informações de Endereço (Separadas)</h5>
+            <h5 class="mb-3 text-info">Informações de Endereço</h5>
 
-            <!-- ENDEREÇO: CEP / RUA / NÚMERO -->
             <div class="row mb-3">
                 <div class="col-md-3 form-group">
                     <label for="cep" class="form-label">CEP</label>
@@ -78,7 +68,6 @@
                 </div>
             </div>
 
-            <!-- ENDEREÇO: BAIRRO / CIDADE / ESTADO -->
             <div class="row mb-3">
                 <div class="col-md-5 form-group">
                     <label for="bairro" class="form-label">Bairro</label>
@@ -94,13 +83,11 @@
                 </div>
             </div>
 
-            <!-- ENDEREÇO: COMPLEMENTO -->
             <div class="form-group mb-4">
                 <label for="complemento" class="form-label">Complemento</label>
                 <input type="text" name="complemento" id="complemento" class="form-control" value="{{ old('complemento') }}">
             </div>
 
-            <!-- Botão de Submissão -->
             <button type="submit" class="btn btn-success">Cadastrar Cliente</button>
 
         </form>

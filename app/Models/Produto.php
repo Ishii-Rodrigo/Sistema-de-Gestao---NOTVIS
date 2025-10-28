@@ -9,17 +9,15 @@ class Produto extends Model
 {
     use HasFactory;
     
-    // O nome da tabela deve ser 'products' para corresponder à sua migração.
-    protected $table = 'products'; 
+    // CORREÇÃO: Alinhando o nome da tabela com sua migration.
+    protected $table = 'produtos'; 
 
     /**
      * Os atributos que podem ser preenchidos em massa.
-     * 'codigo' foi removido, pois será gerado automaticamente (usando o ID).
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        // 'codigo', foi removido daqui
         'nome',
         'descricao',
         'unidade_medida',
@@ -31,8 +29,6 @@ class Produto extends Model
     /**
      * Define um Acessor para o atributo 'codigo'.
      * Permite acessar o ID auto-incrementado como 'codigo', formatado com zeros à esquerda.
-     * Exemplo: Se o ID for 5, ele retornará "005".
-     * Se o ID for 120, ele retornará "120".
      */
     public function getCodigoAttribute()
     {
