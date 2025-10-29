@@ -40,16 +40,32 @@
             </div>
 
             <div class="row mb-4">
-                <div class="col-md-6 form-group">
-                    <label for="telefone" class="form-label">Telefone</label>
+                <div class="col-md-4 form-group">
+                    <label for="telefone" class="form-label">Telefone Fixo</label>
                     <input type="text" name="telefone" id="telefone" class="form-control" value="{{ old('telefone') }}">
                 </div>
-                <div class="col-md-6 form-group">
+                <div class="col-md-4 form-group">
+                    <label for="telefone_celular" class="form-label">Telefone Celular</label>
+                    <input type="text" name="telefone_celular" id="telefone_celular" class="form-control" value="{{ old('telefone_celular') }}">
+                </div>
+                <div class="col-md-4 form-group">
+                    <label for="data_nascimento" class="form-label">Data de Nascimento</label>
+                    {{-- CORREÇÃO DE FORMATO OLD() --}}
+                    <input type="date" 
+                           name="data_nascimento" 
+                           id="data_nascimento" 
+                           class="form-control" 
+                           value="{{ old('data_nascimento') ? \Carbon\Carbon::parse(old('data_nascimento'))->format('Y-m-d') : '' }}">
+                </div>
+            </div>
+            
+            <div class="row mb-4">
+                <div class="col-12 form-group">
                     <label for="email" class="form-label">E-mail</label>
                     <input type="email" name="email" id="email" class="form-control" value="{{ old('email') }}">
                 </div>
             </div>
-            
+
             <hr class="my-4">
             <h5 class="mb-3 text-info">Informações de Endereço</h5>
 

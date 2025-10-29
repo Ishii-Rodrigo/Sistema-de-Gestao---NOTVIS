@@ -39,8 +39,10 @@
                     <li class="list-group-item"><strong>ID:</strong> {{ $cliente->id }}</li>
                     <li class="list-group-item"><strong>Nome/Razão Social:</strong> {{ $cliente->nome }}</li>
                     <li class="list-group-item"><strong>CPF/CNPJ:</strong> {{ $cliente->cpf_cnpj ?? 'Não informado' }}</li>
-                    <li class="list-group-item"><strong>Telefone:</strong> {{ $cliente->telefone ?? 'Não informado' }}</li>
+                    <li class="list-group-item"><strong>Telefone Fixo:</strong> {{ $cliente->telefone ?? 'Não informado' }}</li>
+                    <li class="list-group-item"><strong>Telefone Celular:</strong> {{ $cliente->telefone_celular ?? 'Não informado' }}</li> {{-- NOVO CAMPO --}}
                     <li class="list-group-item"><strong>E-mail:</strong> {{ $cliente->email ?? 'Não informado' }}</li>
+                    <li class="list-group-item"><strong>Data de Nascimento:</strong> {{ $cliente->data_nascimento ? \Carbon\Carbon::parse($cliente->data_nascimento)->format('d/m/Y') : 'Não informado' }}</li> {{-- NOVO CAMPO --}}
                 </ul>
             </div>
 

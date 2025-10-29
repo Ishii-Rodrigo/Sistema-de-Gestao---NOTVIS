@@ -1,14 +1,15 @@
 @extends('layouts.app')
 
-@section('title', 'Cadastrar Novo Cliente')
-@section('header', 'Cadastrar Novo Cliente')
+@section('title', 'Editar Cliente: ' . $cliente->nome)
+@section('header', 'Editar Cliente')
 
 @section('content')
 
 <div class="container mt-4">
     <div class="card p-4 shadow-sm">
 
-        <h2 class="text-primary mb-4">Novo Cliente</h2>
+        <h2 class="text-primary mb-4">Editar Cliente: {{ $cliente->nome }}</h2>
+        
         <a href="{{ route('clientes.index') }}" class="btn btn-sm btn-outline-primary mb-3" title="Voltar para a Lista">
             <i class="bi bi-arrow-left-circle-fill"></i> Voltar para a Lista
         </a>
@@ -23,71 +24,91 @@
             </div>
         @endif
 
-        <form action="{{ route('clientes.store') }}" method="POST">
+        {{-- CORRIGIDO: Form action e method para UPDATE --}}
+        <form action="{{ route('clientes.update', $cliente->id) }}" method="POST">
             @csrf
+            @method('PUT')
 
             <div class="row mb-4">
                 <h5 class="mb-3 text-info">Dados Pessoais</h5>
                 <div class="col-md-6 form-group">
                     <label for="nome" class="form-label">Nome/Razão Social (*)</label>
-                    <input type="text" name="nome" id="nome" class="form-control" value="{{ old('nome') }}" required>
+                    <input type="text" name="nome" id="nome" class="form-control" value="{{ old('nome', $cliente->nome) }}" required>
                 </div>
                 <div class="col-md-6 form-group">
                     <label for="cpf_cnpj" class="form-label">CPF/CNPJ</label>
-                    <input type="text" name="cpf_cnpj" id="cpf_cnpj" class="form-control" value="{{ old('cpf_cnpj') }}">
+                    <input type="text" name="cpf_cnpj" id="cpf_cnpj" class="form-control" value="{{ old('cpf_cnpj', $cliente->cpf_cnpj) }}">
                 </div>
             </div>
 
             <div class="row mb-4">
-                <div class="col-md-6 form-group">
-                    <label for="telefone" class="form-label">Telefone</label>
-                    <input type="text" name="telefone" id="telefone" class="form-control" value="{{ old('telefone') }}">
+                <div class="col-md-4 form-group">
+                    <label for="telefone" class="form-label">Telefone Fixo</label>
+                    <input type="text" name="telefone" id="telefone" class="form-control" value="{{ old('telefone', $cliente->telefone) }}">
                 </div>
-                <div class="col-md-6 form-group">
-                    <label for="email" class="form-label">E-mail</label>
-                    <input type="email" name="email" id="email" class="form-control" value="{{ old('email') }}">
+                {{-- CAMPO NOVO: Telefone Celular --}}
+                <div class="col-md-4 form-group">
+                    <label for="telefone_celular" class="form-label">Telefone Celular</label>
+                    <input type="text" name="telefone_celular" id="telefone_celular" class="form-control" value="{{ old('telefone_celular', $cliente->telefone_celular) }}">
+                </div>
+                {{-- CAMPO NOVO: Data de Nascimento (com correção de formato) --}}
+                <div class="col-md-4 form-group">
+                    <label for="data_nascimento" class="form-label">Data de Nascimento</label>
+                    {{-- CORREÇÃO DE FORMATO OLD() e $cliente->data_nascimento --}}
+                    <input type="date" 
+                           name="data_nascimento" 
+                           id="data_nascimento" 
+                           class="form-control" 
+                           value="{{ old('data_nascimento', $cliente->data_nascimento ? \Carbon\Carbon::parse($cliente->data_nascimento)->format('Y-m-d') : '') }}">
                 </div>
             </div>
             
+            <div class="row mb-4">
+                <div class="col-12 form-group">
+                    <label for="email" class="form-label">E-mail</label>
+                    <input type="email" name="email" id="email" class="form-control" value="{{ old('email', $cliente->email) }}">
+                </div>
+            </div>
+
             <hr class="my-4">
             <h5 class="mb-3 text-info">Informações de Endereço</h5>
 
             <div class="row mb-3">
                 <div class="col-md-3 form-group">
                     <label for="cep" class="form-label">CEP</label>
-                    <input type="text" name="cep" id="cep" class="form-control" value="{{ old('cep') }}">
+                    <input type="text" name="cep" id="cep" class="form-control" value="{{ old('cep', $cliente->cep) }}">
                 </div>
                 <div class="col-md-7 form-group">
                     <label for="rua" class="form-label">Rua</label>
-                    <input type="text" name="rua" id="rua" class="form-control" value="{{ old('rua') }}">
+                    <input type="text" name="rua" id="rua" class="form-control" value="{{ old('rua', $cliente->rua) }}">
                 </div>
                 <div class="col-md-2 form-group">
                     <label for="numero" class="form-label">Número</label>
-                    <input type="text" name="numero" id="numero" class="form-control" value="{{ old('numero') }}">
+                    <input type="text" name="numero" id="numero" class="form-control" value="{{ old('numero', $cliente->numero) }}">
                 </div>
             </div>
 
             <div class="row mb-3">
                 <div class="col-md-5 form-group">
                     <label for="bairro" class="form-label">Bairro</label>
-                    <input type="text" name="bairro" id="bairro" class="form-control" value="{{ old('bairro') }}">
+                    <input type="text" name="bairro" id="bairro" class="form-control" value="{{ old('bairro', $cliente->bairro) }}">
                 </div>
                 <div class="col-md-5 form-group">
                     <label for="cidade" class="form-label">Cidade</label>
-                    <input type="text" name="cidade" id="cidade" class="form-control" value="{{ old('cidade') }}">
+                    <input type="text" name="cidade" id="cidade" class="form-control" value="{{ old('cidade', $cliente->cidade) }}">
                 </div>
                 <div class="col-md-2 form-group">
                     <label for="estado" class="form-label">Estado (UF)</label>
-                    <input type="text" name="estado" id="estado" class="form-control" value="{{ old('estado') }}" maxlength="2">
+                    <input type="text" name="estado" id="estado" class="form-control" value="{{ old('estado', $cliente->estado) }}" maxlength="2">
                 </div>
             </div>
 
             <div class="form-group mb-4">
                 <label for="complemento" class="form-label">Complemento</label>
-                <input type="text" name="complemento" id="complemento" class="form-control" value="{{ old('complemento') }}">
+                <input type="text" name="complemento" id="complemento" class="form-control" value="{{ old('complemento', $cliente->complemento) }}">
             </div>
 
-            <button type="submit" class="btn btn-success">Cadastrar Cliente</button>
+            <button type="submit" class="btn btn-warning">Salvar Alterações</button>
 
         </form>
     </div>

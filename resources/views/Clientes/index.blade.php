@@ -16,17 +16,43 @@
             <h2 class="text-primary mb-0">Lista de Clientes</h2>
         </div>
         
-        <a href="{{ route('clientes.create') }}" class="btn btn-sm btn-success" title="Cadastrar Novo Cliente">
-            <i class="bi bi-plus-circle-fill"></i> Novo Cliente
-        </a>
+        {{-- CAMPO DE PESQUISA COM BOTÃO --}}
+        <div class="d-flex">
+            <form action="{{ route('clientes.index') }}" method="GET" class="d-flex me-3">
+                <input type="text" 
+                       name="search" 
+                       class="form-control form-control-sm" 
+                       placeholder="Buscar por Nome, Email, CPF..."
+                       value="{{ $termo ?? '' }}"
+                       style="width: 250px;">
+                       
+                <button type="submit" class="btn btn-sm btn-secondary ms-2" title="Pesquisar Clientes">
+                    <i class="bi bi-search"></i> Pesquisar
+                </button>
+            </form>
+            
+            <a href="{{ route('clientes.create') }}" class="btn btn-sm btn-success" title="Cadastrar Novo Cliente">
+                <i class="bi bi-plus-circle-fill"></i> Novo Cliente
+            </a>
+        </div>
     </div>
+
+    {{-- Exibe o termo de pesquisa atual --}}
+    @isset($termo)
+        @if($termo)
+            <div class="alert alert-info d-flex justify-content-between align-items-center">
+                <span>Resultados para o termo: <strong>"{{ $termo }}"</strong></span>
+                <a href="{{ route('clientes.index') }}" class="btn btn-sm btn-info text-white">Limpar Pesquisa</a>
+            </div>
+        @endif
+    @endisset
 
     @if (session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
     @if ($clientes->isEmpty())
-        <div class="alert alert-info">Nenhum cliente encontrado.</div>
+        <div class="alert alert-warning">Nenhum cliente encontrado. @isset($termo) para o termo "{{ $termo }}" @endisset.</div>
     @else
         <div class="table-responsive">
             <table class="table table-striped table-hover shadow-sm">
@@ -51,7 +77,7 @@
                             <td>{{ $cliente->cep ?? '-' }}</td>
                             <td>{{ $cliente->cidade ?? '-' }}/{{ $cliente->estado ?? '-' }}</td>
                             
-                            {{-- BOTÕES DE AÇÃO: Padronizados com 'btn-sm' e ícones --}}
+                            {{-- BOTÕES DE AÇÃO --}}
                             <td>
                                 <a href="{{ route('clientes.show', $cliente->id) }}" class="btn btn-sm btn-info text-white" title="Ver Detalhes">
                                     <i class="bi bi-eye-fill"></i>

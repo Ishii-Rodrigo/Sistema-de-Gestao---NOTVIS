@@ -10,14 +10,22 @@ class Cliente extends Model
     use HasFactory;
 
     /**
+     * Os atributos que devem ser convertidos para objetos Carbon.
+     */
+    protected $dates = [
+        'data_nascimento', // Garante tratamento correto do formato de data
+    ];
+    
+    /**
      * Os atributos que são atribuíveis em massa.
-     * Inclui todos os campos pessoais e os campos de endereço separados.
      */
     protected $fillable = [
         'nome',
         'cpf_cnpj',
         'telefone',
+        'telefone_celular', // NOVO CAMPO
         'email',
+        'data_nascimento', // NOVO CAMPO
         // Campos de Endereço
         'cep',
         'rua',

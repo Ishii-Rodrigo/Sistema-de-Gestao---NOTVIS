@@ -11,8 +11,6 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Esta migration DEVE CRIAR a tabela 'clientes'.
-        // Se ela estava com 'Schema::table', isso causava o erro.
         Schema::create('clientes', function (Blueprint $table) {
             $table->id();
             
@@ -20,9 +18,11 @@ return new class extends Migration
             $table->string('nome');            // Nome/Razão Social
             $table->string('cpf_cnpj', 20)->unique()->nullable(); // CPF/CNPJ
             $table->string('telefone', 20)->nullable(); // Telefone
+            $table->string('telefone_celular', 20)->nullable(); // **NOVO CAMPO**
             $table->string('email')->unique()->nullable(); // E-mail
+            $table->date('data_nascimento')->nullable(); // **NOVO CAMPO**
             
-            // Campos de Endereço (utilizados no Model Cliente)
+            // Campos de Endereço
             $table->string('cep', 10)->nullable();
             $table->string('rua')->nullable();
             $table->string('numero', 20)->nullable();
