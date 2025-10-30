@@ -6,17 +6,21 @@
 @section('content')
 
 <div class="container mt-4">
+    
+    {{-- AQUI ESTÁ O TÍTULO EM LINHA PRÓPRIA, ACIMA DOS BOTÕES --}}
+    <h2 class="text-primary mb-3">Lista de Clientes</h2>
+
     <div class="d-flex justify-content-between align-items-center mb-4">
         
         <div class="d-flex align-items-center">
-            <a href="{{ route('home') }}" class="btn btn-sm btn-outline-primary me-3" title="Voltar ao Menu Principal">
+            <a href="{{ route('home') }}" class="btn btn-sm btn-outline-primary" title="Voltar ao Menu Principal">
                 <i class="bi bi-arrow-left-circle-fill"></i> Voltar
             </a>
             
-            <h2 class="text-primary mb-0">Lista de Clientes</h2>
+            {{-- REMOVIDO: <h2 class="text-primary mb-0">Lista de Clientes</h2> --}}
         </div>
         
-        {{-- CAMPO DE PESQUISA COM BOTÃO --}}
+        {{-- CAMPO DE PESQUISA COM BOTÃO E NOVO CLIENTE --}}
         <div class="d-flex">
             <form action="{{ route('clientes.index') }}" method="GET" class="d-flex me-3">
                 <input type="text" 

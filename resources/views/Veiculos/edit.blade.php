@@ -9,8 +9,9 @@
     <div class="card p-4 shadow-sm">
 
         <h2 class="text-primary mb-4">Editar Veículo: {{ $veiculo->placa }}</h2>
-        <a href="{{ route('veiculos.show', $veiculo->id) }}" class="btn btn-sm btn-outline-secondary mb-3">
-            <i class="bi bi-arrow-left-circle"></i> Voltar para Detalhes
+        {{-- CORREÇÃO: Botão "Voltar" padronizado --}}
+        <a href="{{ route('veiculos.show', $veiculo->id) }}" class="btn btn-sm btn-outline-primary mb-3" title="Voltar para Detalhes">
+            <i class="bi bi-arrow-left-circle-fill"></i> Voltar para Detalhes
         </a>
 
         @if($errors->any())
@@ -91,7 +92,7 @@
             </div>
 
             {{-- MODIFICAÇÃO: Botão de Submissão com Ícone --}}
-            <button type="submit" class="btn btn-success">
+            <button type="submit" class="btn btn-warning">
                 <i class="bi bi-check-circle-fill"></i> Salvar Alterações
             </button>
         </form>

@@ -12,8 +12,9 @@
 
         {{-- MODIFICAÇÃO: Botões de Ação Padronizados --}}
         <div class="mb-4 d-flex justify-content-between">
-            <a href="{{ route('veiculos.index') }}" class="btn btn-sm btn-outline-secondary">
-                <i class="bi bi-arrow-left-circle"></i> Voltar para a Lista
+            {{-- CORREÇÃO: Botão "Voltar" padronizado --}}
+            <a href="{{ route('veiculos.index') }}" class="btn btn-sm btn-outline-primary" title="Voltar para a Lista">
+                <i class="bi bi-arrow-left-circle-fill"></i> Voltar para a Lista
             </a>
             <div>
                 <a href="{{ route('veiculos.edit', $veiculo->id) }}" class="btn btn-warning me-2">

@@ -9,8 +9,9 @@
     <div class="card p-4 shadow-sm">
 
         <h2 class="text-primary mb-4">Cadastrar Novo Veículo</h2>
-        <a href="{{ route('veiculos.index') }}" class="btn btn-sm btn-outline-secondary mb-3">
-            <i class="bi bi-arrow-left-circle"></i> Voltar para a Lista
+        {{-- CORREÇÃO: Botão "Voltar" padronizado --}}
+        <a href="{{ route('veiculos.index') }}" class="btn btn-sm btn-outline-primary mb-3" title="Voltar para a Lista">
+            <i class="bi bi-arrow-left-circle-fill"></i> Voltar para a Lista
         </a>
 
         @if($errors->any())

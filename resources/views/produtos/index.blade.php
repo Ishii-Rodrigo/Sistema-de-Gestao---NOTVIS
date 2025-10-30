@@ -5,27 +5,54 @@
 
 @section('content')
 <div class="container mt-4">
+    
+    <h2 class="text-primary mb-3">Lista de Produtos</h2> 
+
     <div class="d-flex justify-content-between align-items-center mb-4">
         
         <div class="d-flex align-items-center">
-            <a href="{{ route('home') }}" class="btn btn-sm btn-outline-primary me-3" title="Voltar ao Menu Principal">
+            <a href="{{ route('home') }}" class="btn btn-sm btn-outline-primary" title="Voltar ao Menu Principal">
                 <i class="bi bi-arrow-left-circle-fill"></i> Voltar
             </a>
-            
-            <h2 class="text-primary mb-0">Lista de Produtos</h2>
         </div>
         
-        <a href="{{ route('produtos.create') }}" class="btn btn-sm btn-success" title="Cadastrar Novo Produto">
-            <i class="bi bi-plus-circle-fill"></i> Novo Produto
-        </a>
+        {{-- CAMPO DE PESQUISA COM BOTÃO E NOVO PRODUTO --}}
+        <div class="d-flex">
+            <form action="{{ route('produtos.index') }}" method="GET" class="d-flex me-3">
+                <input type="text" 
+                       name="search" 
+                       class="form-control form-control-sm" 
+                       placeholder="Buscar por Nome ou Código..."
+                       value="{{ $termo ?? '' }}"
+                       style="width: 250px;">
+                       
+                <button type="submit" class="btn btn-sm btn-secondary ms-2" title="Pesquisar Produtos">
+                    <i class="bi bi-search"></i> Pesquisar
+                </button>
+            </form>
+            
+            <a href="{{ route('produtos.create') }}" class="btn btn-sm btn-success" title="Cadastrar Novo Produto">
+                <i class="bi bi-plus-circle-fill"></i> Novo Produto
+            </a>
+        </div>
     </div>
+
+    {{-- NOVO: Exibe o termo de pesquisa atual --}}
+    @isset($termo)
+        @if($termo)
+            <div class="alert alert-info d-flex justify-content-between align-items-center">
+                <span>Resultados para o termo: <strong>"{{ $termo }}"</strong></span>
+                <a href="{{ route('produtos.index') }}" class="btn btn-sm btn-info text-white">Limpar Pesquisa</a>
+            </div>
+        @endif
+    @endisset
 
     @if (session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
     @if ($produtos->isEmpty())
-        <div class="alert alert-info">Nenhum produto encontrado.</div>
+        <div class="alert alert-info">Nenhum produto encontrado @isset($termo) para o termo "{{ $termo }}" @endisset.</div>
     @else
         <div class="table-responsive">
             <table class="table table-striped table-hover shadow-sm">

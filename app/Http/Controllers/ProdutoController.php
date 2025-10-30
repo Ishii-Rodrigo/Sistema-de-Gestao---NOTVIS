@@ -5,17 +5,27 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Produto;
 
-// O nome da classe deve ser ProdutoController, não ProdutoContoller
 class ProdutoController extends Controller 
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource with optional search functionality.
      */
-    public function index()
+    public function index(Request $request)
     {
-        // Certifique-se de que o Model é Produto e está buscando corretamente
-        $produtos = Produto::all(); 
-        return view('produtos.index', compact('produtos'));
+        $termo = $request->input('search');
+        $query = Produto::query();
+
+        // Lógica de pesquisa: Filtra por nome ou código se um termo for fornecido
+        if ($termo) {
+            $query->where('nome', 'like', "%{$termo}%")
+                  ->orWhere('codigo', 'like', "%{$termo}%");
+        }
+
+        // Busca e ordena os produtos
+        $produtos = $query->latest()->get(); 
+        
+        // Passa os produtos E o termo de pesquisa para a view
+        return view('produtos.index', compact('produtos', 'termo'));
     }
 
     /**
@@ -53,9 +63,6 @@ class ProdutoController extends Controller
         ]
         );
 
-        // Note: Se o campo 'codigo' for gerado automaticamente (como indicado na sua view),
-        // ele deve ser gerado antes ou no evento 'creating' do Model.
-        // Aqui, assumimos que os campos passados via $request->all() são preenchíveis (fillable).
         Produto::create($request->all());
         
         return redirect()->route('produtos.index')
@@ -72,11 +79,9 @@ class ProdutoController extends Controller
 
     /**
      * Show the form for editing the specified resource. (UPDATE - Form)
-     * O Route Model Binding injeta automaticamente o objeto Produto.
      */
     public function edit(Produto $produto)
     {
-        // **Esta linha agora deve funcionar, pois o arquivo edit.blade.php está no Canvas**
         return view('produtos.edit', compact('produto'));
     }
 

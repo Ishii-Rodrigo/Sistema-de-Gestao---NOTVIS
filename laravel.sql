@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 27/10/2025 às 15:30
+-- Tempo de geração: 30/10/2025 às 00:19
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -56,7 +56,9 @@ CREATE TABLE `clientes` (
   `nome` varchar(255) NOT NULL,
   `cpf_cnpj` varchar(20) DEFAULT NULL,
   `telefone` varchar(20) DEFAULT NULL,
+  `telefone_celular` varchar(20) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
+  `data_nascimento` date DEFAULT NULL,
   `cep` varchar(10) DEFAULT NULL,
   `rua` varchar(255) DEFAULT NULL,
   `numero` varchar(20) DEFAULT NULL,
@@ -136,12 +138,12 @@ CREATE TABLE `migrations` (
 --
 
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
-(1, '0001_01_01_000000_create_users_table', 1),
-(2, '0001_01_01_000001_create_cache_table', 1),
-(3, '0001_01_01_000002_create_jobs_table', 1),
-(4, '2025_09_26_010038_create_produtos_table', 1),
-(5, '2025_10_21_120000_create_clientes_table', 2),
-(6, '2025_10_22_134940_create_veiculos_table', 2);
+(13, '0001_01_01_000000_create_users_table', 1),
+(14, '0001_01_01_000001_create_cache_table', 1),
+(15, '0001_01_01_000002_create_jobs_table', 1),
+(16, '2025_09_26_010038_create_produtos_table', 1),
+(17, '2025_10_21_120000_create_clientes_table', 1),
+(18, '2025_10_22_134940_create_veiculos_table', 1);
 
 -- --------------------------------------------------------
 
@@ -193,7 +195,8 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('pyoI5isq1lxqcZGIgrc9XfDeMyrAjyTB4VbGK6m1', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoicUw0dXpqNWd6ZWhqejY5VWphaUxTdndVU1hENk0zT2Z1T0duR0hmUCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjY6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9ob21lIjt9czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTt9', 1761575380);
+('A3DfJNCbRKQwjcG2SOjzVZr6EEv7QwqPS7utO3im', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiY1c5WmRRd3dWY044UUxiRFlrb2U2cmx4aDB4clZDaDN6RWNNUVVjYyI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjI2OiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvaG9tZSI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE7fQ==', 1761766619),
+('oWsd45sTGWht7NKYwrzguQmeBB3vbCqYUedSwpSw', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiTjQ5RlFldnp5Mjh1YnJzSEl2eWJGbFJOeFhOd0dJSUduVzg3cG5IOSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mzc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9jbGllbnRlcy9jcmVhdGUiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO30=', 1761754644);
 
 -- --------------------------------------------------------
 
@@ -217,8 +220,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Usuario Teste', 'teste@teste.com', NULL, '$2y$12$tJRK3qnr3q9BF2WHAK.qqeX73KK6S1fw0cufMYHJak/A63SVh4Toi', NULL, '2025-10-24 17:16:10', '2025-10-24 17:16:10'),
-(2, 'Test User', 'test@example.com', '2025-10-25 20:18:34', '$2y$12$xII07lDPOo9cJGk1LIkmWeyjk31xHmRnKTUO8VCteu6yGwP93hauu', '40O1rcqsWt', '2025-10-25 20:18:34', '2025-10-25 20:18:34');
+(1, 'Rodrigo', 'teste@teste.com', NULL, '$2y$12$mr.J05bMhIokx75e/lthn.hgnBvTdPntyoHNOrpIs.2gwEkxc4G.G', NULL, '2025-10-29 19:16:40', '2025-10-29 19:16:40');
 
 -- --------------------------------------------------------
 
@@ -349,19 +351,19 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT de tabela `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT de tabela `produtos`
 --
 ALTER TABLE `produtos`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de tabela `veiculos`

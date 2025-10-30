@@ -58,7 +58,10 @@
                 <textarea name="descricao" id="descricao" class="form-control" rows="3">{{ old('descricao', $produto->descricao) }}</textarea>
             </div>
             
-            <button type="submit" class="btn btn-success">Salvar Alterações</button>
+            {{-- MODIFICADO: Alterado para btn-warning e adicionado ícone --}}
+            <button type="submit" class="btn btn-warning">
+                <i class="bi bi-check-circle-fill"></i> Salvar Alterações
+            </button>
 
         </form>
     </div>

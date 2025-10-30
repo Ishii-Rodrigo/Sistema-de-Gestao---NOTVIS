@@ -56,7 +56,10 @@
                 <textarea name="descricao" id="descricao" class="form-control" rows="3">{{ old('descricao') }}</textarea>
             </div>
             
-            <button type="submit" class="btn btn-success">Cadastrar Produto</button>
+            {{-- MODIFICADO: Adicionado ícone ao botão de submissão --}}
+            <button type="submit" class="btn btn-success">
+                <i class="bi bi-save-fill"></i> Cadastrar Produto
+            </button>
 
         </form>
     </div>

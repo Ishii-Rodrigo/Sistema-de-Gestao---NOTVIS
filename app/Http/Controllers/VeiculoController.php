@@ -9,13 +9,31 @@ use App\Models\Cliente; // Importar o Model Cliente para usar na criação/ediç
 class VeiculoController extends Controller
 {
     /**
-     * Exibe a lista de todos os veículos.
+     * Exibe a lista de todos os veículos com funcionalidade de pesquisa opcional.
      */
-    public function index()
+    public function index(Request $request)
     {
-        // Carrega os veículos com o nome do cliente (eager loading)
-        $veiculos = Veiculo::with('cliente')->latest()->get();
-        return view('veiculos.index', compact('veiculos'));
+        $termo = $request->input('search');
+
+        // Inicia a query com eager loading para o cliente
+        $query = Veiculo::with('cliente');
+
+        // Lógica de pesquisa: Filtra se um termo for fornecido
+        if ($termo) {
+            $query->where('placa', 'like', "%{$termo}%")
+                  ->orWhere('marca', 'like', "%{$termo}%")
+                  ->orWhere('modelo', 'like', "%{$termo}%")
+                  // Pesquisa no relacionamento com a tabela de Clientes
+                  ->orWhereHas('cliente', function ($q) use ($termo) {
+                      $q->where('nome', 'like', "%{$termo}%");
+                  });
+        }
+        
+        // Busca e ordena os veículos
+        $veiculos = $query->latest()->get();
+
+        // Passa os veículos E o termo de pesquisa para a view
+        return view('veiculos.index', compact('veiculos', 'termo'));
     }
 
     /**
