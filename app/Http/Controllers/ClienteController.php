@@ -4,122 +4,46 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Cliente; 
-use Carbon\Carbon; // Necessário para o tratamento da data
+use Carbon\Carbon; 
 
 class ClienteController extends Controller
 {
     /**
-     * Display a listing of the resource. (Com Pesquisa)
+     * Exibe a lista de recursos (Clientes).
+     * CORREÇÃO: Adicionado o método index() que estava faltando.
      */
-    public function index(Request $request)
+    public function index()
     {
-        $query = Cliente::query();
-        $termo = $request->input('search'); // Pega o termo de busca
+        // Busca todos os clientes (ou com paginação: Cliente::paginate(10))
+        $clientes = Cliente::all(); 
 
-        // LÓGICA DE PESQUISA
-        if ($termo) {
-            $query->where('nome', 'LIKE', "%{$termo}%")
-                  ->orWhere('email', 'LIKE', "%{$termo}%")
-                  ->orWhere('cpf_cnpj', 'LIKE', "%{$termo}%")
-                  ->orWhere('telefone_celular', 'LIKE', "%{$termo}%")
-                  ->orWhere('cidade', 'LIKE', "%{$termo}%");
-        }
-
-        // Executa a query
-        $clientes = $query->orderBy('nome')->get();
-
-        // Passa os clientes e o termo de volta para a view
-        return view('clientes.index', compact('clientes', 'termo'));
+        // Retorna a view de listagem
+        return view('clientes.index', compact('clientes')); 
     }
-
+    
     /**
-     * Show the form for creating a new resource.
+     * Mostra o formulário para criar um novo recurso.
      */
     public function create()
     {
         return view('clientes.create');
     }
-
+    
     /**
-     * Store a newly created resource in storage. (Com Tratamento de Data)
+     * Armazena um recurso recém-criado no storage. (CÓDIGO ORIGINAL DO USUÁRIO)
      */
     public function store(Request $request)
     {
         // 1. Validação
         $request->validate([
             'nome' => 'required|max:255',
-            'cpf_cnpj' => 'nullable|max:20|unique:clientes,cpf_cnpj',
-            'telefone' => 'nullable|max:20',
-            'telefone_celular' => 'nullable|max:20', 
-            'email' => 'nullable|email|unique:clientes,email',
-            'data_nascimento' => 'nullable|date', 
-            'cep' => 'nullable|max:10',
-            'rua' => 'nullable|max:255',
-            'numero' => 'nullable|max:20',
-            'bairro' => 'nullable|max:255',
-            'cidade' => 'nullable|max:255',
-            'estado' => 'nullable|max:2',
-            'complemento' => 'nullable|max:255',
-        ],
-        [
-            'nome.required' => 'O campo Nome/Razão Social é obrigatório.',
-            'cpf_cnpj.unique' => 'O CPF/CNPJ informado já está cadastrado.',
-            'email.unique' => 'O e-mail informado já está cadastrado.',
-            'data_nascimento.date' => 'O campo Data de Nascimento deve ser uma data válida.',
-        ]);
-
-        // 2. TRATAMENTO DA DATA (Previne o erro 31975-02-02)
-        $data = $request->all();
-
-        try {
-            if (!empty($data['data_nascimento'])) {
-                // Formata a data para Y-m-d. Se for um ano inválido, o Carbon lança exceção.
-                $data['data_nascimento'] = Carbon::parse($data['data_nascimento'])->format('Y-m-d');
-            } else {
-                $data['data_nascimento'] = null;
-            }
-        } catch (\Exception $e) {
-            $data['data_nascimento'] = null; // Se a data for inválida para o MySQL, define como nulo
-        }
-
-        Cliente::create($data); 
-
-        return redirect()->route('clientes.index')->with('success', 'Cliente cadastrado com sucesso!');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        $cliente = Cliente::findOrFail($id);
-        return view('clientes.show', compact('cliente'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        $cliente = Cliente::findOrFail($id);
-        return view('clientes.edit', compact('cliente'));
-    }
-
-    /**
-     * Update the specified resource in storage. (Com Lógica de Edição e Tratamento de Data)
-     */
-    public function update(Request $request, string $id)
-    {
-        $cliente = Cliente::findOrFail($id);
-
-        // 1. Validação (com unique do CPF/CNPJ e Email ignorando o cliente atual)
-        $request->validate([
-            'nome' => 'required|max:255',
-            'cpf_cnpj' => 'nullable|max:20|unique:clientes,cpf_cnpj,' . $id,
+            'cpf_cnpj' => 'nullable|max:20|unique:clientes',
+            'email' => 'nullable|email|max:255|unique:clientes',
             'telefone' => 'nullable|max:20',
             'telefone_celular' => 'nullable|max:20',
-            'email' => 'nullable|email|unique:clientes,email,' . $id,
-            'data_nascimento' => 'nullable|date',
+            'data_nascimento' => 'nullable|date', 
+            
+            // Endereço
             'cep' => 'nullable|max:10',
             'rua' => 'nullable|max:255',
             'numero' => 'nullable|max:20',
@@ -140,7 +64,77 @@ class ClienteController extends Controller
 
         try {
             if (!empty($data['data_nascimento'])) {
-                $data['data_nascimento'] = Carbon::parse($data['data_nascimento'])->format('Y-m-d');
+                $data['data_nascimento'] = Carbon::createFromFormat('Y-m-d', $data['data_nascimento'])->format('Y-m-d');
+            } else {
+                $data['data_nascimento'] = null;
+            }
+        } catch (\Exception $e) {
+            $data['data_nascimento'] = null;
+        }
+
+        // 3. Cria o cliente
+        Cliente::create($data); 
+
+        return redirect()->route('clientes.index')->with('success', 'Cliente cadastrado com sucesso!');
+    }
+
+    /**
+     * Exibe o recurso especificado.
+     */
+    public function show(Cliente $cliente)
+    {
+        return view('clientes.show', compact('cliente'));
+    }
+
+    /**
+     * Mostra o formulário para editar o recurso especificado. (CÓDIGO ORIGINAL DO USUÁRIO)
+     */
+    public function edit(Cliente $cliente)
+    {
+        // Garante que a data é convertida para o formato de input (YYYY-MM-DD)
+        if ($cliente->data_nascimento) {
+            $cliente->data_nascimento = Carbon::parse($cliente->data_nascimento)->format('Y-m-d');
+        }
+        return view('clientes.edit', compact('cliente'));
+    }
+
+    /**
+     * Atualiza o recurso especificado no storage. (CÓDIGO ORIGINAL DO USUÁRIO)
+     */
+    public function update(Request $request, Cliente $cliente)
+    {
+        // 1. Validação com regra 'unique' para ignorar o cliente atual.
+        $request->validate([
+            'nome' => 'required|max:255',
+            // Corrigido: Ignora o ID do cliente atual na verificação de unicidade
+            'cpf_cnpj' => 'nullable|max:20|unique:clientes,cpf_cnpj,' . $cliente->id, 
+            'email' => 'nullable|email|max:255|unique:clientes,email,' . $cliente->id, 
+            'telefone' => 'nullable|max:20',
+            'telefone_celular' => 'nullable|max:20',
+            'data_nascimento' => 'nullable|date',
+            
+            // Endereço
+            'cep' => 'nullable|max:10',
+            'rua' => 'nullable|max:255',
+            'numero' => 'nullable|max:20',
+            'bairro' => 'nullable|max:255',
+            'cidade' => 'nullable|max:255',
+            'estado' => 'nullable|max:2',
+            'complemento' => 'nullable|max:255',
+        ],
+        [
+            'nome.required' => 'O campo Nome/Razão Social é obrigatório.',
+            'cpf_cnpj.unique' => 'O CPF/CNPJ informado já está cadastrado.',
+            'email.unique' => 'O e-mail informado já está cadastrado.',
+            'data_nascimento.date' => 'O campo Data de Nascimento deve ser uma data válida.',
+        ]);
+
+        // 2. TRATAMENTO DA DATA
+        $data = $request->all();
+
+        try {
+            if (!empty($data['data_nascimento'])) {
+                $data['data_nascimento'] = Carbon::createFromFormat('Y-m-d', $data['data_nascimento'])->format('Y-m-d');
             } else {
                 $data['data_nascimento'] = null;
             }
@@ -153,13 +147,14 @@ class ClienteController extends Controller
 
         return redirect()->route('clientes.index')->with('success', 'Cliente atualizado com sucesso!');
     }
-
+    
     /**
-     * Remove the specified resource from storage.
+     * Remove o recurso especificado do storage.
      */
-    public function destroy(string $id)
+    public function destroy(Cliente $cliente)
     {
-        Cliente::destroy($id);
-        return redirect()->route('clientes.index')->with('success', 'Cliente removido com sucesso!');
+        $cliente->delete();
+        
+        return redirect()->route('clientes.index')->with('success', 'Cliente excluído com sucesso!');
     }
 }

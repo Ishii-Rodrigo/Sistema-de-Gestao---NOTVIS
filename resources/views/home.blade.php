@@ -97,16 +97,17 @@
             </a>
         </div>
 
-        {{-- MÓDULO 3: Serviços (Venda/Ordem de Serviço) --}}
+        {{-- MÓDULO 3: SERVIÇOS (Vendas/Orçamentos) --}}
         <div class="col-md-4 col-lg-3">
-            <a href="#" class="text-decoration-none">
+            {{-- CORRIGIDO: Agora aponta para a rota de listagem de vendas --}}
+            <a href="{{ route('vendas.index') }}" class="text-decoration-none">
                 <div class="card card-module shadow-sm h-100 p-4 text-center">
                     <div class="card-body d-flex flex-column align-items-center justify-content-center">
-                        <div class="card-icon" style="background-color: #4CAF50;">
-                            <i class="bi bi-file-earmark-text-fill"></i>
+                        <div class="card-icon bg-success" style="background-color: #28a745;">
+                            <i class="bi bi-tools"></i>
                         </div>
-                        <h5 class="card-title fw-bold">Serviços</h5>
-                        <p class="card-text text-muted">Ordens de serviço e vendas</p>
+                        <h5 class="card-title fw-bold">Serviços / Vendas</h5>
+                        <p class="card-text text-muted">Orçamentos e serviços realizados</p>
                     </div>
                 </div>
             </a>
