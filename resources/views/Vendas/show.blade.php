@@ -9,7 +9,6 @@
 
         <h2 class="text-primary mb-4">Venda/Orçamento #{{ $venda->id }}</h2>
 
-        {{-- BOTÕES DE AÇÃO: Voltar, Editar, Excluir --}}
         <div class="mb-4 d-flex justify-content-between">
             <a href="{{ route('vendas.index') }}" class="btn btn-sm btn-outline-primary" title="Voltar para a Lista">
                 <i class="bi bi-arrow-left-circle-fill"></i> Voltar para a Lista

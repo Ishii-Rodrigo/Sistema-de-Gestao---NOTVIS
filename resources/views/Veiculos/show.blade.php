@@ -10,7 +10,6 @@
 
         <h2 class="text-primary mb-4">Detalhes do Veículo (Placa: {{ $veiculo->placa }})</h2>
 
-        {{-- MODIFICAÇÃO: Botões de Ação Padronizados --}}
         <div class="mb-4 d-flex justify-content-between">
             {{-- CORREÇÃO: Botão "Voltar" padronizado --}}
             <a href="{{ route('veiculos.index') }}" class="btn btn-sm btn-outline-primary" title="Voltar para a Lista">

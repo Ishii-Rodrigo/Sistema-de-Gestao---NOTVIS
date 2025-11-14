@@ -24,7 +24,6 @@
             </div>
         @endif
 
-        {{-- CORRIGIDO: Form action e method para UPDATE --}}
         <form action="{{ route('clientes.update', $cliente->id) }}" method="POST">
             @csrf
             @method('PUT')
@@ -46,15 +45,15 @@
                     <label for="telefone" class="form-label">Telefone Fixo</label>
                     <input type="text" name="telefone" id="telefone" class="form-control" value="{{ old('telefone', $cliente->telefone) }}">
                 </div>
-                {{-- CAMPO NOVO: Telefone Celular --}}
+            
                 <div class="col-md-4 form-group">
                     <label for="telefone_celular" class="form-label">Telefone Celular</label>
                     <input type="text" name="telefone_celular" id="telefone_celular" class="form-control" value="{{ old('telefone_celular', $cliente->telefone_celular) }}">
                 </div>
-                {{-- CAMPO NOVO: Data de Nascimento (com correção de formato) --}}
+                
                 <div class="col-md-4 form-group">
                     <label for="data_nascimento" class="form-label">Data de Nascimento</label>
-                    {{-- CORREÇÃO DE FORMATO OLD() e $cliente->data_nascimento --}}
+                   
                     <input type="date" 
                            name="data_nascimento" 
                            id="data_nascimento" 

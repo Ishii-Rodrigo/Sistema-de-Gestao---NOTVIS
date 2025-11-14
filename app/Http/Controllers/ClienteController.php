@@ -9,16 +9,32 @@ use Carbon\Carbon;
 class ClienteController extends Controller
 {
     /**
-     * Exibe a lista de recursos (Clientes).
-     * CORREÇÃO: Adicionado o método index() que estava faltando.
+     * Exibe a lista de recursos (Clientes) com funcionalidade de busca.
      */
-    public function index()
+    public function index(Request $request)
     {
-        // Busca todos os clientes (ou com paginação: Cliente::paginate(10))
-        $clientes = Cliente::all(); 
+        // 1. Obtém o termo de busca da requisição (campo 'search')
+        $termo = $request->input('search');
 
-        // Retorna a view de listagem
-        return view('clientes.index', compact('clientes')); 
+        // 2. Inicializa a query no modelo Cliente
+        $query = Cliente::query();
+        
+        // 3. Aplica o filtro de busca se houver um termo
+        if ($termo) {
+            $query->where(function ($q) use ($termo) {
+                // Filtra nos campos 'nome', 'email', 'cpf_cnpj' ou 'telefone'
+                $q->where('nome', 'like', '%' . $termo . '%')
+                  ->orWhere('email', 'like', '%' . $termo . '%')
+                  ->orWhere('cpf_cnpj', 'like', '%' . $termo . '%')
+                  ->orWhere('telefone', 'like', '%' . $termo . '%');
+            });
+        }
+        
+        // 4. Busca os clientes (ordenando por nome)
+        $clientes = $query->orderBy('nome')->get(); 
+
+        // 5. Retorna a view, passando os clientes E O TERMO DE BUSCA
+        return view('clientes.index', compact('clientes', 'termo')); 
     }
     
     /**
@@ -30,7 +46,7 @@ class ClienteController extends Controller
     }
     
     /**
-     * Armazena um recurso recém-criado no storage. (CÓDIGO ORIGINAL DO USUÁRIO)
+     * Armazena um recurso recém-criado no storage.
      */
     public function store(Request $request)
     {
@@ -87,7 +103,7 @@ class ClienteController extends Controller
     }
 
     /**
-     * Mostra o formulário para editar o recurso especificado. (CÓDIGO ORIGINAL DO USUÁRIO)
+     * Mostra o formulário para editar o recurso especificado.
      */
     public function edit(Cliente $cliente)
     {
@@ -99,7 +115,7 @@ class ClienteController extends Controller
     }
 
     /**
-     * Atualiza o recurso especificado no storage. (CÓDIGO ORIGINAL DO USUÁRIO)
+     * Atualiza o recurso especificado no storage.
      */
     public function update(Request $request, Cliente $cliente)
     {

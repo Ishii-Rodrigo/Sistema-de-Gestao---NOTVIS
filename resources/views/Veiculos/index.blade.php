@@ -16,8 +16,7 @@
                 <i class="bi bi-arrow-left-circle-fill"></i> Voltar
             </a>
         </div>
-        
-        {{-- CAMPO DE PESQUISA COM BOTÃO E NOVO VEÍCULO --}}
+ 
         <div class="d-flex">
             <form action="{{ route('veiculos.index') }}" method="GET" class="d-flex me-3">
                 <input type="text" 
@@ -38,7 +37,6 @@
         </div>
     </div>
 
-    {{-- NOVO: Exibe o termo de pesquisa atual --}}
     @isset($termo)
         @if($termo)
             <div class="alert alert-info d-flex justify-content-between align-items-center">
@@ -56,8 +54,8 @@
         <div class="alert alert-info">Nenhum veículo encontrado @isset($termo) para o termo "{{ $termo }}" @endisset.</div>
     @else
         <div class="table-responsive">
-            <table class="table table-striped table-hover shadow-sm">
-                <thead class="table-dark">
+            <table class="table table-striped table-hover table-sm align-middle">
+                <thead>
                     <tr>
                         <th>Placa</th>
                         <th>Marca</th>

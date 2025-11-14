@@ -109,16 +109,16 @@
 </div>
 
 <style>
-    /* Estilos específicos para a tela de login */
+    
     .login-page main {
-        background: none !important; /* Remove o gradiente da main padrão */
+        background: none !important; 
         padding: 0 !important;
         flex-grow: 1;
     }
     .login-page body {
-        background-color: #f8f9fa; /* Fundo mais claro */
+        background-color: #f8f9fa;
     }
-    /* O logo na navbar superior (definida em app.blade.php) garante o logo no canto. */
+    
 </style>
 
 @endsection

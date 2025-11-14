@@ -15,15 +15,15 @@
                 <i class="bi bi-arrow-left-circle-fill"></i> Voltar
             </a>
         </div>
-        
-        {{-- CAMPO DE PESQUISA COM BOTÃO E NOVO PRODUTO --}}
+     
         <div class="d-flex">
+            {{-- FORMULÁRIO DE BUSCA (Certifique-se que o NAME é 'search') --}}
             <form action="{{ route('produtos.index') }}" method="GET" class="d-flex me-3">
                 <input type="text" 
                        name="search" 
                        class="form-control form-control-sm" 
-                       placeholder="Buscar por Nome ou Código..."
-                       value="{{ $termo ?? '' }}"
+                       placeholder="Buscar por Nome..." {{-- AJUSTE NO PLACEHOLDER --}}
+                       value="{{ $termo ?? '' }}" {{-- Mantém o termo de busca no input --}}
                        style="width: 250px;">
                        
                 <button type="submit" class="btn btn-sm btn-secondary ms-2" title="Pesquisar Produtos">
@@ -37,44 +37,60 @@
         </div>
     </div>
 
-    {{-- NOVO: Exibe o termo de pesquisa atual --}}
-    @isset($termo)
-        @if($termo)
-            <div class="alert alert-info d-flex justify-content-between align-items-center">
-                <span>Resultados para o termo: <strong>"{{ $termo }}"</strong></span>
-                <a href="{{ route('produtos.index') }}" class="btn btn-sm btn-info text-white">Limpar Pesquisa</a>
-            </div>
-        @endif
-    @endisset
-
+    {{-- MENSAGEM DE SUCESSO --}}
     @if (session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+    
+    {{-- EXIBIÇÃO DO RESULTADO DA BUSCA E BOTÃO LIMPAR BUSCA --}}
+    @if (!empty($termo))
+        <div class="alert alert-info d-flex justify-content-between align-items-center">
+            <span class="fw-bold">
+                Resultado da busca por: "{{ $termo }}" ({{ $produtos->count() }} {{ $produtos->count() === 1 ? 'produto encontrado' : 'produtos encontrados' }})
+            </span>
+            <a href="{{ route('produtos.index') }}" class="btn btn-sm btn-primary">
+                Limpar Busca
+            </a>
+        </div>
     @endif
 
-    @if ($produtos->isEmpty())
-        <div class="alert alert-info">Nenhum produto encontrado @isset($termo) para o termo "{{ $termo }}" @endisset.</div>
+    {{-- VERIFICAÇÃO SE HÁ PRODUTOS OU SE A BUSCA FOI VAZIA --}}
+    @if ($produtos->isEmpty() && empty($termo))
+        <div class="alert alert-warning" role="alert">
+            Nenhum produto cadastrado. Comece adicionando um novo produto!
+        </div>
+    @elseif ($produtos->isEmpty() && !empty($termo))
+        <div class="alert alert-warning" role="alert">
+            Nenhum produto encontrado para o termo de busca: **"{{ $termo }}"**.
+        </div>
     @else
         <div class="table-responsive">
-            <table class="table table-striped table-hover shadow-sm">
-                <thead class="table-dark">
+            <table class="table table-striped table-hover table-sm align-middle">
+                <thead>
                     <tr>
-                        <th>Código</th>
+                        <th>ID</th>
                         <th>Nome</th>
-                        <th>Un. Medida</th>
+                        <th>Unidade</th>
+                        <th>Cód.</th>
+                        <th>Quantidade</th>
                         <th>Preço Venda</th>
-                        <th>Estoque Mínimo</th>
-                        <th>Ações</th>
+                        <th style="width: 150px;">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($produtos as $produto)
+                    @foreach ($produtos as $produto)
                         <tr>
-                            <td>{{ $produto->codigo }}</td> 
+                            <td>{{ $produto->id }}</td>
                             <td>{{ $produto->nome }}</td>
                             <td>{{ $produto->unidade_medida }}</td>
-                            <td>R$ {{ number_format($produto->preco_venda, 2, ',', '.') }}</td>
+                            <td>{{ $produto->codigo ?? '-' }}</td>
                             <td>{{ $produto->estoque_minimo }}</td>
+                            <td>R$ {{ number_format($produto->preco_venda, 2, ',', '.') }}</td>
                             <td>
+                                {{-- BOTÕES DE AÇÃO --}}
                                 <a href="{{ route('produtos.show', $produto->id) }}" class="btn btn-sm btn-info text-white" title="Ver Detalhes">
                                     <i class="bi bi-eye-fill"></i>
                                 </a>

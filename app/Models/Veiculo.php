@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo; // Importação recomendada
 
 class Veiculo extends Model
 {
@@ -15,15 +16,14 @@ class Veiculo extends Model
         'modelo',
         'ano',
         'cor',
-        'cliente_id',
+        'cliente_id', // Chave estrangeira para o relacionamento
     ];
 
     /**
      * Define o relacionamento: Um Veículo pertence a um Cliente.
      */
-    public function cliente()
+    public function cliente(): BelongsTo
     {
-        // Garante que o Veículo está relacionado ao Cliente
         return $this->belongsTo(Cliente::class);
     }
 }

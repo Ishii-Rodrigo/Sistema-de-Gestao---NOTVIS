@@ -46,12 +46,10 @@
 <div class="container-fluid" style="flex-grow: 1;">
     <div class="text-center mb-5">
         <h1 class="display-6 fw-bold">Sistema de Gestão <span class="text-primary-notvis">NOTVIS</span></h1>
-        <p class="lead text-muted">Selecione um módulo para começar</p>
     </div>
 
     <div class="row g-4 justify-content-center">
         
-        {{-- MÓDULO 1: Clientes --}}
         <div class="col-md-4 col-lg-3">
             <a href="{{ route('clientes.index') }}" class="text-decoration-none">
                 <div class="card card-module shadow-sm h-100 p-4 text-center">
@@ -60,29 +58,26 @@
                             <i class="bi bi-people-fill"></i>
                         </div>
                         <h5 class="card-title fw-bold">Clientes</h5>
-                        <p class="card-text text-muted">Gerenciar cadastro de clientes</p>
+                        <p class="card-text text-muted">Cadastro e Gestão de Clientes</p>
                     </div>
                 </div>
             </a>
         </div>
 
-        {{-- MÓDULO NOVO: Veículos (INCLUSÃO SOLICITADA) --}}
         <div class="col-md-4 col-lg-3">
             <a href="{{ route('veiculos.index') }}" class="text-decoration-none">
                 <div class="card card-module shadow-sm h-100 p-4 text-center">
                     <div class="card-body d-flex flex-column align-items-center justify-content-center">
-                        {{-- Cor e ícone para Veículos --}}
                         <div class="card-icon" style="background-color: #0056b3;"> 
                             <i class="bi bi-car-front-fill"></i>
                         </div>
                         <h5 class="card-title fw-bold">Veículos</h5>
-                        <p class="card-text text-muted">Cadastro e gestão de veículos</p>
+                        <p class="card-text text-muted">Cadastro e Gestão de Veículos</p>
                     </div>
                 </div>
             </a>
         </div>
 
-        {{-- MÓDULO 2: Estoque (Produtos) (LIGAÇÃO CORRIGIDA) --}}
         <div class="col-md-4 col-lg-3">
             <a href="{{ route('produtos.index') }}" class="text-decoration-none">
                 <div class="card card-module shadow-sm h-100 p-4 text-center">
@@ -91,15 +86,13 @@
                             <i class="bi bi-box-seam-fill"></i>
                         </div>
                         <h5 class="card-title fw-bold">Estoque</h5>
-                        <p class="card-text text-muted">Controle de peças e produtos</p>
+                        <p class="card-text text-muted">Cadastro e Controle de produtos</p>
                     </div>
                 </div>
             </a>
         </div>
 
-        {{-- MÓDULO 3: SERVIÇOS (Vendas/Orçamentos) --}}
         <div class="col-md-4 col-lg-3">
-            {{-- CORRIGIDO: Agora aponta para a rota de listagem de vendas --}}
             <a href="{{ route('vendas.index') }}" class="text-decoration-none">
                 <div class="card card-module shadow-sm h-100 p-4 text-center">
                     <div class="card-body d-flex flex-column align-items-center justify-content-center">
@@ -107,13 +100,12 @@
                             <i class="bi bi-tools"></i>
                         </div>
                         <h5 class="card-title fw-bold">Serviços / Vendas</h5>
-                        <p class="card-text text-muted">Orçamentos e serviços realizados</p>
+                        <p class="card-text text-muted">Orçamentos e Vendas Realizados</p>
                     </div>
                 </div>
             </a>
         </div>
 
-        {{-- MÓDULO 4: Relatórios --}}
         <div class="col-md-4 col-lg-3">
             <a href="#" class="text-decoration-none">
                 <div class="card card-module shadow-sm h-100 p-4 text-center">
@@ -122,13 +114,12 @@
                             <i class="bi bi-graph-up"></i>
                         </div>
                         <h5 class="card-title fw-bold">Relatórios</h5>
-                        <p class="card-text text-muted">Relatórios detalhados</p>
+                        <p class="card-text text-muted">Relatórios Detalhados</p>
                     </div>
                 </div>
             </a>
         </div>
 
-        {{-- MÓDULO 5: Agenda --}}
         <div class="col-md-4 col-lg-3">
             <a href="#" class="text-decoration-none">
                 <div class="card card-module shadow-sm h-100 p-4 text-center">
@@ -137,13 +128,12 @@
                             <i class="bi bi-calendar-event-fill"></i>
                         </div>
                         <h5 class="card-title fw-bold">Agenda</h5>
-                        <p class="card-text text-muted">Agendamento de serviços</p>
+                        <p class="card-text text-muted">Agendamento de Serviços</p>
                     </div>
                 </div>
             </a>
         </div>
 
-        {{-- MÓDULO 6: Configurações --}}
         <div class="col-md-4 col-lg-3">
             <a href="#" class="text-decoration-none">
                 <div class="card card-module shadow-sm h-100 p-4 text-center">
@@ -152,7 +142,7 @@
                             <i class="bi bi-gear-fill"></i>
                         </div>
                         <h5 class="card-title fw-bold">Configurações</h5>
-                        <p class="card-text text-muted">Configurações do sistema</p>
+                        <p class="card-text text-muted">Configurações do Sistema</p>
                     </div>
                 </div>
             </a>
@@ -160,7 +150,6 @@
 
     </div>
 
-    {{-- Rodapé Fixo (Mantido para uniformidade) --}}
     <div class="w-100 position-fixed bottom-0 start-0 bg-primary" style="height: 50px; background-image: linear-gradient(to right, #007bff, #00c6ff);">
         <div class="container text-center text-white p-2">
             <span class="fw-bold">© 2025 - NOTVIS. Todos os direitos reservados.</span>

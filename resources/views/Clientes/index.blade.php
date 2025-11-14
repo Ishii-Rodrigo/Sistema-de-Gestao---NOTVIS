@@ -7,7 +7,6 @@
 
 <div class="container mt-4">
     
-    {{-- AQUI ESTÁ O TÍTULO EM LINHA PRÓPRIA, ACIMA DOS BOTÕES --}}
     <h2 class="text-primary mb-3">Lista de Clientes</h2>
 
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -17,17 +16,16 @@
                 <i class="bi bi-arrow-left-circle-fill"></i> Voltar
             </a>
             
-            {{-- REMOVIDO: <h2 class="text-primary mb-0">Lista de Clientes</h2> --}}
         </div>
         
-        {{-- CAMPO DE PESQUISA COM BOTÃO E NOVO CLIENTE --}}
         <div class="d-flex">
+            {{-- FORMULÁRIO DE BUSCA --}}
             <form action="{{ route('clientes.index') }}" method="GET" class="d-flex me-3">
                 <input type="text" 
                        name="search" 
                        class="form-control form-control-sm" 
                        placeholder="Buscar por Nome, Email, CPF..."
-                       value="{{ $termo ?? '' }}"
+                       value="{{ $termo ?? '' }}" {{-- Garante que o termo buscado permaneça no input --}}
                        style="width: 250px;">
                        
                 <button type="submit" class="btn btn-sm btn-secondary ms-2" title="Pesquisar Clientes">
@@ -40,35 +38,48 @@
             </a>
         </div>
     </div>
-
-    {{-- Exibe o termo de pesquisa atual --}}
-    @isset($termo)
-        @if($termo)
-            <div class="alert alert-info d-flex justify-content-between align-items-center">
-                <span>Resultados para o termo: <strong>"{{ $termo }}"</strong></span>
-                <a href="{{ route('clientes.index') }}" class="btn btn-sm btn-info text-white">Limpar Pesquisa</a>
-            </div>
-        @endif
-    @endisset
-
+    
+    {{-- MENSAGEM DE SUCESSO DO CRUD (se estiver no layout app.blade.php, pode remover daqui) --}}
     @if (session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+    
+    {{-- EXIBIÇÃO DO RESULTADO DA BUSCA E BOTÃO LIMPAR BUSCA --}}
+    @if (!empty($termo))
+        <div class="alert alert-info d-flex justify-content-between align-items-center">
+            <span class="fw-bold">
+                Resultado da busca por: "{{ $termo }}" ({{ $clientes->count() }} {{ $clientes->count() === 1 ? 'cliente encontrado' : 'clientes encontrados' }})
+            </span>
+            <a href="{{ route('clientes.index') }}" class="btn btn-sm btn-primary">
+                Limpar Busca
+            </a>
+        </div>
     @endif
 
-    @if ($clientes->isEmpty())
-        <div class="alert alert-warning">Nenhum cliente encontrado. @isset($termo) para o termo "{{ $termo }}" @endisset.</div>
+
+    @if ($clientes->isEmpty() && empty($termo))
+        <div class="alert alert-warning" role="alert">
+            Nenhum cliente cadastrado. Comece adicionando um novo cliente!
+        </div>
+    @elseif ($clientes->isEmpty() && !empty($termo))
+        <div class="alert alert-warning" role="alert">
+            Nenhum cliente encontrado para o termo de busca: **"{{ $termo }}"**.
+        </div>
     @else
         <div class="table-responsive">
-            <table class="table table-striped table-hover shadow-sm">
-                <thead class="table-dark">
+            <table class="table table-striped table-hover table-sm align-middle">
+                <thead>
                     <tr>
                         <th>ID</th>
                         <th>Nome/Razão Social</th>
                         <th>E-mail</th>
-                        <th>Telefone</th>
-                        <th>CEP</th>
-                        <th>Cidade/UF</th>
-                        <th>Ações</th>
+                        <th>Telefone/Celular</th>
+                        <th>CPF/CNPJ</th>
+                        <th>Endereço Principal</th>
+                        <th style="width: 150px;">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -76,10 +87,10 @@
                         <tr>
                             <td>{{ $cliente->id }}</td>
                             <td>{{ $cliente->nome }}</td>
-                            <td>{{ $cliente->email }}</td>
-                            <td>{{ $cliente->telefone }}</td>
-                            <td>{{ $cliente->cep ?? '-' }}</td>
-                            <td>{{ $cliente->cidade ?? '-' }}/{{ $cliente->estado ?? '-' }}</td>
+                            <td>{{ $cliente->email ?? '-' }}</td>
+                            <td>{{ $cliente->telefone ?? $cliente->telefone_celular ?? '-' }}</td>
+                            <td>{{ $cliente->cpf_cnpj ?? '-' }}</td>
+                            <td>{{ $cliente->rua ?? '-' }}, {{ $cliente->numero ?? 'S/N' }} - {{ $cliente->cidade ?? '-' }}/{{ $cliente->estado ?? '-' }}</td>
                             
                             {{-- BOTÕES DE AÇÃO --}}
                             <td>

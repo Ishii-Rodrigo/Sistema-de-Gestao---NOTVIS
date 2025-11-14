@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 30/10/2025 às 00:19
+-- Tempo de geração: 31/10/2025 às 23:10
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -69,6 +69,13 @@ CREATE TABLE `clientes` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Despejando dados para a tabela `clientes`
+--
+
+INSERT INTO `clientes` (`id`, `nome`, `cpf_cnpj`, `telefone`, `telefone_celular`, `email`, `data_nascimento`, `cep`, `rua`, `numero`, `bairro`, `cidade`, `estado`, `complemento`, `created_at`, `updated_at`) VALUES
+(1, 'RODRIGO TOSHIHIDE ISHII', '05232765914', '44 9 99411676', '44999411678', 'sullamitacarvalho@hotmail.com', '1985-05-19', '87200-161', 'rua constituiçao', '310', 'centro', 'Cianorte', 'PR', 'Apto 609', '2025-10-30 15:27:41', '2025-10-30 15:28:00');
 
 -- --------------------------------------------------------
 
@@ -143,7 +150,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (15, '0001_01_01_000002_create_jobs_table', 1),
 (16, '2025_09_26_010038_create_produtos_table', 1),
 (17, '2025_10_21_120000_create_clientes_table', 1),
-(18, '2025_10_22_134940_create_veiculos_table', 1);
+(18, '2025_10_22_134940_create_veiculos_table', 1),
+(19, '2025_10_30_132748_create_vendas_table', 2);
 
 -- --------------------------------------------------------
 
@@ -195,8 +203,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('A3DfJNCbRKQwjcG2SOjzVZr6EEv7QwqPS7utO3im', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiY1c5WmRRd3dWY044UUxiRFlrb2U2cmx4aDB4clZDaDN6RWNNUVVjYyI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjI2OiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvaG9tZSI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE7fQ==', 1761766619),
-('oWsd45sTGWht7NKYwrzguQmeBB3vbCqYUedSwpSw', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiTjQ5RlFldnp5Mjh1YnJzSEl2eWJGbFJOeFhOd0dJSUduVzg3cG5IOSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mzc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9jbGllbnRlcy9jcmVhdGUiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO30=', 1761754644);
+('Jg4r3x2OorFVDDgjO6QjxK49djeKb4hh3FGLZzxD', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoibVNxa2dtNGdwc1duUmZZZXpLV2NNVEFIcXFrUGdYZG5SWFlKQTdXTyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzU6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC92ZW5kYXMvY3JlYXRlIjt9czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTt9', 1761873360);
 
 -- --------------------------------------------------------
 
@@ -236,6 +243,34 @@ CREATE TABLE `veiculos` (
   `ano` int(11) NOT NULL,
   `cor` varchar(255) NOT NULL,
   `cliente_id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Despejando dados para a tabela `veiculos`
+--
+
+INSERT INTO `veiculos` (`id`, `placa`, `marca`, `modelo`, `ano`, `cor`, `cliente_id`, `created_at`, `updated_at`) VALUES
+(1, 'ABC1234', 'FORD', 'NEW FIESTA', 2025, 'BRANCO', 1, '2025-10-30 15:31:11', '2025-10-30 15:31:25');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `vendas`
+--
+
+CREATE TABLE `vendas` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `cliente_id` bigint(20) UNSIGNED NOT NULL,
+  `veiculo_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `data_venda` date NOT NULL,
+  `status` varchar(255) NOT NULL DEFAULT 'Orcamento',
+  `forma_pagamento` varchar(255) NOT NULL,
+  `subtotal` decimal(10,2) NOT NULL,
+  `desconto` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `total_final` decimal(10,2) NOT NULL,
+  `observacoes` text DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -326,6 +361,14 @@ ALTER TABLE `veiculos`
   ADD KEY `veiculos_cliente_id_foreign` (`cliente_id`);
 
 --
+-- Índices de tabela `vendas`
+--
+ALTER TABLE `vendas`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `vendas_cliente_id_foreign` (`cliente_id`),
+  ADD KEY `vendas_veiculo_id_foreign` (`veiculo_id`);
+
+--
 -- AUTO_INCREMENT para tabelas despejadas
 --
 
@@ -333,7 +376,7 @@ ALTER TABLE `veiculos`
 -- AUTO_INCREMENT de tabela `clientes`
 --
 ALTER TABLE `clientes`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de tabela `failed_jobs`
@@ -351,7 +394,7 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT de tabela `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT de tabela `produtos`
@@ -363,12 +406,18 @@ ALTER TABLE `produtos`
 -- AUTO_INCREMENT de tabela `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de tabela `veiculos`
 --
 ALTER TABLE `veiculos`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT de tabela `vendas`
+--
+ALTER TABLE `vendas`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
@@ -380,6 +429,13 @@ ALTER TABLE `veiculos`
 --
 ALTER TABLE `veiculos`
   ADD CONSTRAINT `veiculos_cliente_id_foreign` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Restrições para tabelas `vendas`
+--
+ALTER TABLE `vendas`
+  ADD CONSTRAINT `vendas_cliente_id_foreign` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `vendas_veiculo_id_foreign` FOREIGN KEY (`veiculo_id`) REFERENCES `veiculos` (`id`) ON DELETE SET NULL;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

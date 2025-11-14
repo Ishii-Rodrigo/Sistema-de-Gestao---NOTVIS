@@ -8,6 +8,7 @@ use App\Http\Controllers\ProdutoController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\VeiculoController; 
 use App\Http\Controllers\VendaController; 
+use App\Models\Cliente; 
 
 /*
 |--------------------------------------------------------------------------
@@ -15,37 +16,29 @@ use App\Http\Controllers\VendaController;
 |--------------------------------------------------------------------------
 */
 
-// ------------------------------
 // ROTAS DE AUTENTICAÇÃO (LOGIN / LOGOUT)
-// ------------------------------
-
-// Rota para mostrar o formulário de login (rota '/' e nome 'login')
 Route::get('/', [AuthController::class, 'showLogin'])->name('login');
-// Rota para processar a submissão do formulário de login (POST)
 Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
-// Rota para fazer logout (POST)
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
-// ------------------------------
 // ROTAS PROTEGIDAS (APENAS USUÁRIOS AUTENTICADOS)
-// ------------------------------
 Route::middleware('auth')->group(function () {
     
-    // Rota para o menu principal (Após o login)
+    // Rotas Principais
     Route::get('/home', function () {
         return view('home');
     })->name('home');
 
-    // ** Rotas de Produto **
+    // Rotas Resource (CRUD)
     Route::resource('produtos', ProdutoController::class);
-
-    // ** Rotas de Cliente **
     Route::resource('clientes', ClienteController::class);
-
-    // ** Rotas de Veículo **
     Route::resource('veiculos', VeiculoController::class);
-
-    // ** Rotas de Venda/Serviços **
     Route::resource('vendas', VendaController::class);
+
+    // ** Rota de API para carregar veículos de um cliente (CORRIGIDA/ADICIONADA) **
+    // Mapeia para o novo método no VendaController
+    Route::get('/api/veiculos/cliente/{clienteId}', [VendaController::class, 'getVeiculosPorCliente'])
+        ->name('api.veiculos.cliente');
+        
 });

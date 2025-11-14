@@ -38,7 +38,6 @@
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-    {{-- A variável $vendas virá do VendaController::index() --}}
     @if ($vendas->isEmpty())
         <div class="alert alert-info">Nenhuma venda ou orçamento encontrado.</div>
     @else

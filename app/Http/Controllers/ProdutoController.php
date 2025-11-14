@@ -12,19 +12,26 @@ class ProdutoController extends Controller
      */
     public function index(Request $request)
     {
+        // 1. Obtém o termo de busca da requisição
         $termo = $request->input('search');
         $query = Produto::query();
 
-        // Lógica de pesquisa: Filtra por nome ou código se um termo for fornecido
+        // 2. Lógica de pesquisa: Filtra APENAS por nome
         if ($termo) {
-            $query->where('nome', 'like', "%{$termo}%")
-                  ->orWhere('codigo', 'like', "%{$termo}%");
+            // CORREÇÃO: Pesquisa apenas pela coluna 'nome', removendo 'codigo'
+            $query->where('nome', 'like', "%{$termo}%");
+            
+            /*
+             * NOTA: Se você realmente deseja pesquisar por "código", você deve
+             * primeiro garantir que a coluna 'codigo' exista na tabela 'produtos' 
+             * no seu banco de dados (via migração).
+             */
         }
 
-        // Busca e ordena os produtos
+        // 3. Busca e ordena os produtos
         $produtos = $query->latest()->get(); 
         
-        // Passa os produtos E o termo de pesquisa para a view
+        // 4. Passa os produtos E o termo de pesquisa para a view
         return view('produtos.index', compact('produtos', 'termo'));
     }
 
@@ -49,22 +56,13 @@ class ProdutoController extends Controller
             'preco_custo' => 'required|numeric',
             'preco_venda' => 'required|numeric', 
             'estoque_minimo' => 'required|integer|min:0',
-        ],
-        [
-            'nome.required' => 'O campo nome está vazio',
-            'descricao.required' => 'O campo descrição está vazio',
-            'unidade_medida.required' => 'O campo unidade de medida está vazio',
-            'preco_custo.required' => 'O campo preço de custo está vazio',
-            'preco_custo.numeric' => 'O campo preço de custo precisa ser um número',
-            'preco_venda.required' => 'O campo preço de venda está vazio',
-            'preco_venda.numeric' => 'O campo preço de venda precisa ser um número',
-            'estoque_minimo.required' => 'O campo estoque mínimo está vazio',
-            'estoque_minimo.integer' => 'O campo estoque mínimo precisa ser um número inteiro',
-        ]
-        );
-
-        Produto::create($request->all());
+            // O campo 'codigo' foi removido da busca, mas se for usado no formulário, a validação fica aqui:
+            'codigo' => 'nullable|max:50|unique:produtos', 
+        ]);
         
+        // Cria o produto com os dados validados.
+        Produto::create($request->all());
+
         return redirect()->route('produtos.index')
             ->with('success', 'Produto cadastrado com sucesso!');
     }
@@ -98,6 +96,8 @@ class ProdutoController extends Controller
             'preco_custo' => 'required|numeric',
             'preco_venda' => 'required|numeric', 
             'estoque_minimo' => 'required|integer|min:0',
+            // Validação para 'codigo'
+            'codigo' => 'nullable|max:50|unique:produtos,codigo,' . $produto->id,
         ]);
         
         // Atualiza o produto com os dados validados.

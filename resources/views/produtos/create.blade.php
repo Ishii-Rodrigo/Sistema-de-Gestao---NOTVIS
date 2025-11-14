@@ -46,7 +46,7 @@
                     <input name="preco_venda" id="preco_venda" type="number" step="0.01" class="form-control" value="{{ old('preco_venda') }}" required/>
                 </div>
                 <div class="col-md-4 form-group">
-                    <label for="estoque_minimo" class="form-label">Estoque Mínimo (*)</label>
+                    <label for="estoque_minimo" class="form-label">Estoque (*)</label>
                     <input name="estoque_minimo" id="estoque_minimo" type="number" class="form-control" value="{{ old('estoque_minimo', 0) }}" required/>
                 </div>
             </div>
