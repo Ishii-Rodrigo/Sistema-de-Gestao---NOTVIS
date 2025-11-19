@@ -8,6 +8,7 @@ use App\Http\Controllers\ProdutoController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\VeiculoController;
 use App\Http\Controllers\VendaController;
+use App\Http\Controllers\RelatorioController; // 💡 Importa o novo Controller
 use App\Models\Cliente;
 
 /*
@@ -38,13 +39,18 @@ Route::middleware('auth')->group(function () {
     // ** Rotas da Venda (Resource) **
     Route::resource('vendas', VendaController::class);
 
-    // ➡️ Rota ADICIONAL para Impressão (Necessário para o botão de imprimir)
+    // Rota ADICIONAL para Impressão
     Route::get('vendas/{venda}/print', [VendaController::class, 'printVenda'])->name('vendas.print');
 
-    // ➡️ Rota de API para carregar veículos de um cliente (CORREÇÃO DO ERRO)
+    // Rotas de API
     Route::get('/api/veiculos/cliente/{clienteId}', [VendaController::class, 'getVeiculosDoCliente'])->name('api.veiculos.cliente');
-
-    // ➡️ Rota de API para obter detalhes de preço e estoque do produto (Usado no JS de Vendas)
-    Route::get('/api/produtos/{produto}/details', [VendaController::class, 'getProdutoDetails'])->name('api.produtos.details');
+    Route::get('/api/produtos/detalhes/{produtoId}', [VendaController::class, 'getProdutoDetalhes'])->name('api.produtos.detalhes');
+    
+    
+    // =========================================================================
+    // 💡 NOVAS ROTAS DE RELATÓRIOS
+    // =========================================================================
+    Route::get('/relatorios', [RelatorioController::class, 'index'])->name('relatorios.index');
+    Route::get('/relatorios/exportar', [RelatorioController::class, 'exportPdf'])->name('relatorios.exportPdf');
 
 });

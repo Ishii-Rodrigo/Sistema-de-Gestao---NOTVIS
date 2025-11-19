@@ -107,7 +107,7 @@
         </div>
 
         <div class="col-md-4 col-lg-3">
-            <a href="#" class="text-decoration-none">
+            <a href="{{ route('relatorios.index') }}" class="text-decoration-none">
                 <div class="card card-module shadow-sm h-100 p-4 text-center">
                     <div class="card-body d-flex flex-column align-items-center justify-content-center">
                         <div class="card-icon" style="background: linear-gradient(45deg, #673AB7, #9C27B0);">
