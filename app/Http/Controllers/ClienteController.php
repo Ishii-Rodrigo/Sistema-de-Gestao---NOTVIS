@@ -75,11 +75,56 @@ class ClienteController extends Controller
             'data_nascimento.date' => 'O campo Data de Nascimento deve ser uma data válida.',
         ]);
 
-        // 2. TRATAMENTO DA DATA
+        // 2. TRATAMENTO E FORMATAÇÃO DOS DADOS
         $data = $request->all();
 
+        // **APLICAÇÃO DAS REGRAS DE FORMATAÇÃO**
+
+        // Nome/Razão Social (Title Case)
+        if (isset($data['nome'])) {
+            $data['nome'] = $this->formatarNome($data['nome']);
+        }
+        
+        // CPF/CNPJ (Máscara)
+        if (isset($data['cpf_cnpj'])) {
+            $data['cpf_cnpj'] = $this->formatarCpfCnpj($data['cpf_cnpj']);
+        }
+        
+        // Telefones (Máscara)
+        if (isset($data['telefone'])) {
+            $data['telefone'] = $this->formatarTelefone($data['telefone']);
+        }
+        
+        if (isset($data['telefone_celular'])) {
+            $data['telefone_celular'] = $this->formatarTelefone($data['telefone_celular']);
+        }
+
+        // CEP (Máscara: XXXXX-XXX)
+        if (isset($data['cep'])) {
+            $data['cep'] = $this->formatarCep($data['cep']);
+        }
+
+        // Endereço (Title Case: Rua, Bairro, Cidade)
+        if (isset($data['rua'])) {
+            $data['rua'] = $this->formatarNome($data['rua']);
+        }
+        if (isset($data['bairro'])) {
+            $data['bairro'] = $this->formatarNome($data['bairro']);
+        }
+        if (isset($data['cidade'])) {
+            $data['cidade'] = $this->formatarNome($data['cidade']);
+        }
+
+        // Estado/UF (Uppercase: PR, SP)
+        if (isset($data['estado'])) {
+            $data['estado'] = $this->formatarEstado($data['estado']);
+        }
+
+
+        // TRATAMENTO DA DATA
         try {
             if (!empty($data['data_nascimento'])) {
+                // Carbon já lida com o formato Y-m-d do input type="date"
                 $data['data_nascimento'] = Carbon::createFromFormat('Y-m-d', $data['data_nascimento'])->format('Y-m-d');
             } else {
                 $data['data_nascimento'] = null;
@@ -145,9 +190,52 @@ class ClienteController extends Controller
             'data_nascimento.date' => 'O campo Data de Nascimento deve ser uma data válida.',
         ]);
 
-        // 2. TRATAMENTO DA DATA
+        // 2. TRATAMENTO E FORMATAÇÃO DOS DADOS
         $data = $request->all();
 
+        // **APLICAÇÃO DAS REGRAS DE FORMATAÇÃO**
+
+        // Nome/Razão Social (Title Case)
+        if (isset($data['nome'])) {
+            $data['nome'] = $this->formatarNome($data['nome']);
+        }
+        
+        // CPF/CNPJ (Máscara)
+        if (isset($data['cpf_cnpj'])) {
+            $data['cpf_cnpj'] = $this->formatarCpfCnpj($data['cpf_cnpj']);
+        }
+        
+        // Telefones (Máscara)
+        if (isset($data['telefone'])) {
+            $data['telefone'] = $this->formatarTelefone($data['telefone']);
+        }
+        
+        if (isset($data['telefone_celular'])) {
+            $data['telefone_celular'] = $this->formatarTelefone($data['telefone_celular']);
+        }
+
+        // CEP (Máscara: XXXXX-XXX)
+        if (isset($data['cep'])) {
+            $data['cep'] = $this->formatarCep($data['cep']);
+        }
+
+        // Endereço (Title Case: Rua, Bairro, Cidade)
+        if (isset($data['rua'])) {
+            $data['rua'] = $this->formatarNome($data['rua']);
+        }
+        if (isset($data['bairro'])) {
+            $data['bairro'] = $this->formatarNome($data['bairro']);
+        }
+        if (isset($data['cidade'])) {
+            $data['cidade'] = $this->formatarNome($data['cidade']);
+        }
+
+        // Estado/UF (Uppercase: PR, SP)
+        if (isset($data['estado'])) {
+            $data['estado'] = $this->formatarEstado($data['estado']);
+        }
+
+        // TRATAMENTO DA DATA
         try {
             if (!empty($data['data_nascimento'])) {
                 $data['data_nascimento'] = Carbon::createFromFormat('Y-m-d', $data['data_nascimento'])->format('Y-m-d');
@@ -172,5 +260,108 @@ class ClienteController extends Controller
         $cliente->delete();
         
         return redirect()->route('clientes.index')->with('success', 'Cliente excluído com sucesso!');
+    }
+
+    // =================================================================
+    // MÉTODOS AUXILIARES DE FORMATAÇÃO
+    // =================================================================
+
+    /**
+     * Converte uma string para formato de título (Title Case).
+     * Regra: Independentemente de como o usuário digitar, cada palavra deve ter a primeira letra maiúscula e o restante minúsculo.
+     * Aplicável a Nome/Razão Social, Rua, Bairro e Cidade.
+     * Ex: "joão da silva" -> "João Da Silva"
+     */
+    protected function formatarNome($nome)
+    {
+        if (empty($nome)) {
+            return null;
+        }
+        // Converte toda a string para minúsculo, e depois aplica mb_convert_case (título)
+        return mb_convert_case(mb_strtolower($nome, 'UTF-8'), MB_CASE_TITLE, 'UTF-8');
+    }
+
+    /**
+     * Remove a máscara de um documento e aplica a máscara correta (CPF ou CNPJ).
+     * Regra: CPF (11 dígitos): XXX.XXX.XXX-XX | CNPJ (14 dígitos): XX.XXX.XXX/XXXX-XX
+     * Ex: 12345678901 -> 123.456.789-01
+     */
+    protected function formatarCpfCnpj($documento)
+    {
+        if (empty($documento)) {
+            return null;
+        }
+        // Remove todos os caracteres que não são números
+        $limpo = preg_replace('/[^0-9]/', '', $documento);
+
+        if (strlen($limpo) === 11) {
+            // CPF: XXX.XXX.XXX-XX
+            return preg_replace('/(\d{3})(\d{3})(\d{3})(\d{2})/', '$1.$2.$3-$4', $limpo);
+        } elseif (strlen($limpo) === 14) {
+            // CNPJ: XX.XXX.XXX/XXXX-XX
+            return preg_replace('/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/', '$1.$2.$3/$4-$5', $limpo);
+        }
+
+        return $documento; // Retorna o valor original se não tiver 11 ou 14 dígitos (mantendo a validação)
+    }
+
+    /**
+     * Remove a máscara do telefone e aplica a máscara nacional correta.
+     * Regra: Fixo (10 dígitos): (XX) XXXX-XXXX | Celular (11 dígitos): (XX) 9XXXX-XXXX
+     * Ex: 44998765432 -> (44) 99876-5432
+     */
+    protected function formatarTelefone($telefone)
+    {
+        if (empty($telefone)) {
+            return null;
+        }
+        // Remove todos os caracteres que não são números
+        $limpo = preg_replace('/[^0-9]/', '', $telefone);
+
+        $length = strlen($limpo);
+
+        if ($length === 11) {
+            // Celular (XX) 9XXXX-XXXX
+            return preg_replace('/(\d{2})(\d{5})(\d{4})/', '($1) $2-$3', $limpo);
+        } elseif ($length === 10) {
+            // Fixo (XX) XXXX-XXXX
+            return preg_replace('/(\d{2})(\d{4})(\d{4})/', '($1) $2-$3', $limpo);
+        }
+
+        return $telefone; // Retorna o valor original se não for 10 ou 11 dígitos
+    }
+
+    /**
+     * Remove a máscara do CEP e aplica o formato XXXXX-XXX.
+     * Regra: Deve conter 8 dígitos numéricos e ser formatado como XXXXX-XXX.
+     * Ex: 87200000 -> 87200-000
+     */
+    protected function formatarCep($cep)
+    {
+        if (empty($cep)) {
+            return null;
+        }
+        // Remove todos os caracteres que não são números
+        $limpo = preg_replace('/[^0-9]/', '', $cep);
+
+        if (strlen($limpo) === 8) {
+            // CEP: XXXXX-XXX
+            return preg_replace('/(\d{5})(\d{3})/', '$1-$2', $limpo);
+        }
+        return $cep; // Retorna o valor original se não tiver 8 dígitos
+    }
+
+    /**
+     * Converte a sigla do estado para duas letras maiúsculas.
+     * Regra: Deve ser salvo com duas letras maiúsculas (padrão oficial do IBGE).
+     * Ex: pr -> PR
+     */
+    protected function formatarEstado($estado)
+    {
+        if (empty($estado)) {
+            return null;
+        }
+        // Converte para maiúsculas
+        return strtoupper($estado);
     }
 }

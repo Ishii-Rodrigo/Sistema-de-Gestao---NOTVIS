@@ -17,13 +17,13 @@
         </div>
      
         <div class="d-flex">
-            {{-- FORMULÁRIO DE BUSCA (Certifique-se que o NAME é 'search') --}}
+            {{-- FORMULÁRIO DE BUSCA --}}
             <form action="{{ route('produtos.index') }}" method="GET" class="d-flex me-3">
                 <input type="text" 
                        name="search" 
                        class="form-control form-control-sm" 
-                       placeholder="Buscar por Nome..." {{-- AJUSTE NO PLACEHOLDER --}}
-                       value="{{ $termo ?? '' }}" {{-- Mantém o termo de busca no input --}}
+                       placeholder="Buscar por Nome..."
+                       value="{{ $termo ?? '' }}" 
                        style="width: 250px;">
                        
                 <button type="submit" class="btn btn-sm btn-secondary ms-2" title="Pesquisar Produtos">
@@ -37,59 +37,49 @@
         </div>
     </div>
 
-    {{-- MENSAGEM DE SUCESSO --}}
-    @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
-    
-    {{-- EXIBIÇÃO DO RESULTADO DA BUSCA E BOTÃO LIMPAR BUSCA --}}
-    @if (!empty($termo))
-        <div class="alert alert-info d-flex justify-content-between align-items-center">
-            <span class="fw-bold">
-                Resultado da busca por: "{{ $termo }}" ({{ $produtos->count() }} {{ $produtos->count() === 1 ? 'produto encontrado' : 'produtos encontrados' }})
-            </span>
-            <a href="{{ route('produtos.index') }}" class="btn btn-sm btn-primary">
-                Limpar Busca
-            </a>
-        </div>
-    @endif
-
-    {{-- VERIFICAÇÃO SE HÁ PRODUTOS OU SE A BUSCA FOI VAZIA --}}
-    @if ($produtos->isEmpty() && empty($termo))
-        <div class="alert alert-warning" role="alert">
-            Nenhum produto cadastrado. Comece adicionando um novo produto!
-        </div>
-    @elseif ($produtos->isEmpty() && !empty($termo))
-        <div class="alert alert-warning" role="alert">
-            Nenhum produto encontrado para o termo de busca: **"{{ $termo }}"**.
+    @if($produtos->isEmpty())
+        <div class="alert alert-warning text-center">
+            Nenhum produto encontrado.
         </div>
     @else
+        @if(session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
+        
         <div class="table-responsive">
-            <table class="table table-striped table-hover table-sm align-middle">
+            <table class="table table-sm table-striped table-hover align-middle">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Nome</th>
-                        <th>Unidade</th>
-                        <th>Cód.</th>
-                        <th>Quantidade</th>
-                        <th>Preço Venda</th>
-                        <th style="width: 150px;">Ações</th>
+                        {{-- Novos pesos e alinhamentos --}}
+                        <th style="width: 10%">Código</th>
+                        <th style="width: 35%">Nome</th>
+                        <th style="width: 10%">Unidade</th>
+                        
+                        {{-- Coluna Venda: Largura ajustada e alinhamento à direita --}}
+                        <th style="width: 15%" class="text-end">Venda</th>
+                        
+                        {{-- Coluna Estoque Atual: Largura ajustada e alinhamento à direita --}}
+                        <th style="width: 15%" class="text-end">Estoque Atual</th> 
+                        
+                        {{-- Coluna Ações: Largura ajustada e alinhamento centralizado --}}
+                        <th style="width: 15%" class="text-center">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($produtos as $produto)
+                    @foreach($produtos as $produto)
                         <tr>
-                            <td>{{ $produto->id }}</td>
+                            <td>{{ $produto->codigo }}</td>
                             <td>{{ $produto->nome }}</td>
-                            <td>{{ $produto->unidade_medida }}</td>
-                            <td>{{ $produto->codigo ?? '-' }}</td>
-                            <td>{{ $produto->estoque_minimo }}</td>
-                            <td>R$ {{ number_format($produto->preco_venda, 2, ',', '.') }}</td>
-                            <td>
+                            {{-- 💡 CORRIGIDO: Exibe o nome por extenso usando o mapeamento --}}
+                            <td>{{ $unidadesMap[$produto->unidade_medida] ?? $produto->unidade_medida }}</td>
+                            
+                            {{-- Dado Venda: Alinhado à direita --}}
+                            <td class="text-end">R$ {{ number_format($produto->preco_venda, 2, ',', '.') }}</td>
+                            
+                            {{-- Dado Estoque Atual: Alinhado à direita --}}
+                            <td class="text-end">{{ $produto->estoque_atual }}</td>
+                            
+                            <td class="text-center"> {{-- Centraliza os botões --}}
                                 {{-- BOTÕES DE AÇÃO --}}
                                 <a href="{{ route('produtos.show', $produto->id) }}" class="btn btn-sm btn-info text-white" title="Ver Detalhes">
                                     <i class="bi bi-eye-fill"></i>

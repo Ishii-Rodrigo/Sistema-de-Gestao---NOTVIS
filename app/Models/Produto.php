@@ -24,16 +24,25 @@ class Produto extends Model
         'preco_custo',
         'preco_venda',
         'estoque_minimo',
+        // ➡️ ADICIONADO: Necessário para permitir updates e criação via controller
+        'estoque_atual', 
     ];
 
     /**
      * Define um Acessor para o atributo 'codigo'.
-     * Permite acessar o ID auto-incrementado como 'codigo', formatado com zeros à esquerda.
      */
-    public function getCodigoAttribute()
+    public function getCodigoAttribute(): string
     {
-        // str_pad($this->id, 3, '0', STR_PAD_LEFT) formata o ID para ter 
-        // no mínimo 3 dígitos, preenchendo com '0' à esquerda.
         return str_pad($this->attributes['id'], 3, '0', STR_PAD_LEFT);
     }
+    
+    /**
+     * Conversão de tipos (casting) para valores numéricos.
+     */
+    protected $casts = [
+        'preco_custo' => 'decimal:2',
+        'preco_venda' => 'decimal:2',
+        'estoque_minimo' => 'float',
+        'estoque_atual' => 'float', // ➡️ ADICIONADO: Garantir que aceite decimais
+    ];
 }

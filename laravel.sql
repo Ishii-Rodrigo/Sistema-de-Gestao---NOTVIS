@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 31/10/2025 às 23:10
+-- Tempo de geração: 19/11/2025 às 16:47
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -75,7 +75,8 @@ CREATE TABLE `clientes` (
 --
 
 INSERT INTO `clientes` (`id`, `nome`, `cpf_cnpj`, `telefone`, `telefone_celular`, `email`, `data_nascimento`, `cep`, `rua`, `numero`, `bairro`, `cidade`, `estado`, `complemento`, `created_at`, `updated_at`) VALUES
-(1, 'RODRIGO TOSHIHIDE ISHII', '05232765914', '44 9 99411676', '44999411678', 'sullamitacarvalho@hotmail.com', '1985-05-19', '87200-161', 'rua constituiçao', '310', 'centro', 'Cianorte', 'PR', 'Apto 609', '2025-10-30 15:27:41', '2025-10-30 15:28:00');
+(5, 'Rodrigo Toshihide Ishii', '254.789.563-14', '(44) 3631-2377', '(44) 99941-1676', 'mtrodrigo@hotmail.com', '1985-05-19', '87254-154', 'Rua Ladeira Baixa', '325', 'Centro', 'Cianorte', 'PR', 'Apto 609', '2025-11-19 18:13:31', '2025-11-19 18:13:43'),
+(6, 'Domingos Toshihide Ishii', '254.789.654-12', '(44) 3629-1458', '(44) 99977-2547', 'teste1@teste.com', '1959-02-02', '87211-458', 'Rua Do Beco', '2', 'Zona 02', 'Cianorte', 'PR', NULL, '2025-11-19 18:41:58', '2025-11-19 18:41:58');
 
 -- --------------------------------------------------------
 
@@ -151,7 +152,10 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (16, '2025_09_26_010038_create_produtos_table', 1),
 (17, '2025_10_21_120000_create_clientes_table', 1),
 (18, '2025_10_22_134940_create_veiculos_table', 1),
-(19, '2025_10_30_132748_create_vendas_table', 2);
+(19, '2025_10_30_132748_create_vendas_table', 2),
+(20, '2025_11_12_113544_add_estoque_atual_to_produtos_table', 3),
+(21, '2025_11_17_140958_create_venda_items_table', 4),
+(22, '2025_11_18_130958_add_estoque_atual_to_produtos_table', 4);
 
 -- --------------------------------------------------------
 
@@ -179,9 +183,18 @@ CREATE TABLE `produtos` (
   `preco_custo` decimal(10,2) NOT NULL,
   `preco_venda` decimal(10,2) NOT NULL,
   `estoque_minimo` int(11) NOT NULL DEFAULT 0,
+  `estoque_atual` decimal(10,2) NOT NULL DEFAULT 0.00,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Despejando dados para a tabela `produtos`
+--
+
+INSERT INTO `produtos` (`id`, `nome`, `descricao`, `unidade_medida`, `preco_custo`, `preco_venda`, `estoque_minimo`, `estoque_atual`, `created_at`, `updated_at`) VALUES
+(5, 'AMORTECEDOR DIANTEIRO', 'New Fiesta', 'UN', 50.00, 120.00, 1, 8.00, '2025-11-19 18:37:03', '2025-11-19 18:44:45'),
+(6, 'DISCO DE FREIO', 'New Fiesta', 'UN', 89.00, 250.00, 1, 19.00, '2025-11-19 18:44:15', '2025-11-19 18:44:45');
 
 -- --------------------------------------------------------
 
@@ -203,7 +216,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('Jg4r3x2OorFVDDgjO6QjxK49djeKb4hh3FGLZzxD', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoibVNxa2dtNGdwc1duUmZZZXpLV2NNVEFIcXFrUGdYZG5SWFlKQTdXTyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzU6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC92ZW5kYXMvY3JlYXRlIjt9czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTt9', 1761873360);
+('Bn28kCtIvnrSmki5GqFwVJ7RtuiPa6anQDeIAgoh', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoibmxIT3BJTmlWdVFuelBVUVh4WDBUVDV0Njg5d2RBY2NZTU5CM3drVSI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjMwOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvcHJvZHV0b3MiO31zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO30=', 1763567097);
 
 -- --------------------------------------------------------
 
@@ -237,7 +250,7 @@ INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `re
 
 CREATE TABLE `veiculos` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `placa` varchar(7) NOT NULL,
+  `placa` varchar(8) NOT NULL,
   `marca` varchar(255) NOT NULL,
   `modelo` varchar(255) NOT NULL,
   `ano` int(11) NOT NULL,
@@ -252,7 +265,8 @@ CREATE TABLE `veiculos` (
 --
 
 INSERT INTO `veiculos` (`id`, `placa`, `marca`, `modelo`, `ano`, `cor`, `cliente_id`, `created_at`, `updated_at`) VALUES
-(1, 'ABC1234', 'FORD', 'NEW FIESTA', 2025, 'BRANCO', 1, '2025-10-30 15:31:11', '2025-10-30 15:31:25');
+(6, 'ABC-2D77', 'FORD', 'NEW FIESTA', 2015, 'BRANCO', 5, '2025-11-19 18:17:50', '2025-11-19 18:17:50'),
+(7, 'BBB-6H45', 'WOLKSVAGEM', 'GOL', 1984, 'BEGE', 6, '2025-11-19 18:43:29', '2025-11-19 18:43:29');
 
 -- --------------------------------------------------------
 
@@ -274,6 +288,40 @@ CREATE TABLE `vendas` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Despejando dados para a tabela `vendas`
+--
+
+INSERT INTO `vendas` (`id`, `cliente_id`, `veiculo_id`, `data_venda`, `status`, `forma_pagamento`, `subtotal`, `desconto`, `total_final`, `observacoes`, `created_at`, `updated_at`) VALUES
+(2, 5, 6, '2025-11-19', 'Finalizada', 'Cartão de Crédito', 120.00, 0.00, 120.00, NULL, '2025-11-19 18:39:56', '2025-11-19 18:39:56'),
+(3, 6, 7, '2025-11-19', 'Finalizada', 'Cartão de Débito', 370.00, 0.00, 370.00, NULL, '2025-11-19 18:44:45', '2025-11-19 18:44:45');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `venda_items`
+--
+
+CREATE TABLE `venda_items` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `venda_id` bigint(20) UNSIGNED NOT NULL,
+  `produto_id` bigint(20) UNSIGNED NOT NULL,
+  `quantidade` decimal(8,2) NOT NULL,
+  `preco_unitario` decimal(10,2) NOT NULL,
+  `total_item` decimal(10,2) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Despejando dados para a tabela `venda_items`
+--
+
+INSERT INTO `venda_items` (`id`, `venda_id`, `produto_id`, `quantidade`, `preco_unitario`, `total_item`, `created_at`, `updated_at`) VALUES
+(1, 2, 5, 1.00, 120.00, 120.00, '2025-11-19 18:39:56', '2025-11-19 18:39:56'),
+(2, 3, 5, 1.00, 120.00, 120.00, '2025-11-19 18:44:45', '2025-11-19 18:44:45'),
+(3, 3, 6, 1.00, 250.00, 250.00, '2025-11-19 18:44:45', '2025-11-19 18:44:45');
 
 --
 -- Índices para tabelas despejadas
@@ -369,6 +417,14 @@ ALTER TABLE `vendas`
   ADD KEY `vendas_veiculo_id_foreign` (`veiculo_id`);
 
 --
+-- Índices de tabela `venda_items`
+--
+ALTER TABLE `venda_items`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `venda_items_venda_id_foreign` (`venda_id`),
+  ADD KEY `venda_items_produto_id_foreign` (`produto_id`);
+
+--
 -- AUTO_INCREMENT para tabelas despejadas
 --
 
@@ -376,7 +432,7 @@ ALTER TABLE `vendas`
 -- AUTO_INCREMENT de tabela `clientes`
 --
 ALTER TABLE `clientes`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de tabela `failed_jobs`
@@ -394,13 +450,13 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT de tabela `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT de tabela `produtos`
 --
 ALTER TABLE `produtos`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de tabela `users`
@@ -412,13 +468,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT de tabela `veiculos`
 --
 ALTER TABLE `veiculos`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de tabela `vendas`
 --
 ALTER TABLE `vendas`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de tabela `venda_items`
+--
+ALTER TABLE `venda_items`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Restrições para tabelas despejadas
@@ -436,6 +498,13 @@ ALTER TABLE `veiculos`
 ALTER TABLE `vendas`
   ADD CONSTRAINT `vendas_cliente_id_foreign` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `vendas_veiculo_id_foreign` FOREIGN KEY (`veiculo_id`) REFERENCES `veiculos` (`id`) ON DELETE SET NULL;
+
+--
+-- Restrições para tabelas `venda_items`
+--
+ALTER TABLE `venda_items`
+  ADD CONSTRAINT `venda_items_produto_id_foreign` FOREIGN KEY (`produto_id`) REFERENCES `produtos` (`id`),
+  ADD CONSTRAINT `venda_items_venda_id_foreign` FOREIGN KEY (`venda_id`) REFERENCES `vendas` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

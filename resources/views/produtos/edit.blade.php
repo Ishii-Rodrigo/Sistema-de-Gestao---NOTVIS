@@ -32,24 +32,51 @@
                     <label for="nome" class="form-label">Nome (*)</label>
                     <input name="nome" id="nome" type="text" class="form-control" value="{{ old('nome', $produto->nome) }}" required/>
                 </div>
+                
+                {{-- 💡 CORRIGIDO: Campo Unidade de Medida como SELECT (Lista Suspensa) --}}
                 <div class="col-md-6 form-group">
-                    <label for="unidade_medida" class="form-label">Unidade de Medida (UN, PC, etc.) (*)</label>
-                    <input name="unidade_medida" id="unidade_medida" type="text" class="form-control" value="{{ old('unidade_medida', $produto->unidade_medida) }}" required/>
+                    <label for="unidade_medida" class="form-label">Unidade de Medida (*)</label>
+                    <select name="unidade_medida" id="unidade_medida" class="form-control" required>
+                        <option value="">-- Selecione --</option>
+                        @foreach ($unidades as $codigo => $extenso)
+                            <option 
+                                value="{{ $codigo }}" 
+                                {{ (old('unidade_medida', $produto->unidade_medida) == $codigo) ? 'selected' : '' }}
+                            >
+                                {{ $extenso }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
-
+            
+            {{-- Linha de Preços e Estoque (Dividida em 4 colunas) --}}
             <div class="row mb-3">
-                <div class="col-md-4 form-group">
+                <div class="col-md-3 form-group">
                     <label for="preco_custo" class="form-label">Preço de Custo (*)</label>
                     <input name="preco_custo" id="preco_custo" type="number" step="0.01" class="form-control" value="{{ old('preco_custo', $produto->preco_custo) }}" required/>
                 </div>
-                <div class="col-md-4 form-group">
+                <div class="col-md-3 form-group">
                     <label for="preco_venda" class="form-label">Preço de Venda (*)</label>
                     <input name="preco_venda" id="preco_venda" type="number" step="0.01" class="form-control" value="{{ old('preco_venda', $produto->preco_venda) }}" required/>
                 </div>
-                <div class="col-md-4 form-group">
+                
+                {{-- ➡️ CAMPO CORRIGIDO: ESTOQUE ATUAL --}}
+                <div class="col-md-3 form-group">
+                    <label for="estoque_atual" class="form-label">Estoque Atual (*)</label>
+                    <input name="estoque_atual" 
+                           id="estoque_atual" 
+                           type="number" 
+                           step="0.01" 
+                           class="form-control" 
+                           value="{{ old('estoque_atual', $produto->estoque_atual) }}" 
+                           required/>
+                </div>
+                
+                {{-- CAMPO ORIGINAL: ESTOQUE MÍNIMO --}}
+                <div class="col-md-3 form-group">
                     <label for="estoque_minimo" class="form-label">Estoque Mínimo (*)</label>
-                    <input name="estoque_minimo" id="estoque_minimo" type="number" class="form-control" value="{{ old('estoque_minimo', $produto->estoque_minimo) }}" required/>
+                    <input name="estoque_minimo" id="estoque_minimo" type="number" step="0.01" class="form-control" value="{{ old('estoque_minimo', $produto->estoque_minimo) }}" required/>
                 </div>
             </div>
 
@@ -59,9 +86,8 @@
             </div>
            
             <button type="submit" class="btn btn-warning">
-                <i class="bi bi-check-circle-fill"></i> Salvar Alterações
+                <i class="bi bi-floppy-fill"></i> Salvar Alterações
             </button>
-
         </form>
     </div>
 </div>

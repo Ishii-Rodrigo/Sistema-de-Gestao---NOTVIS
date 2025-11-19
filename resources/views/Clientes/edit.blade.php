@@ -53,7 +53,7 @@
                 
                 <div class="col-md-4 form-group">
                     <label for="data_nascimento" class="form-label">Data de Nascimento</label>
-                   
+                    {{-- CORREÇÃO: Utiliza Carbon para formatar a data do cliente ou o valor antigo para 'Y-m-d', padrão do input type="date". --}}
                     <input type="date" 
                            name="data_nascimento" 
                            id="data_nascimento" 

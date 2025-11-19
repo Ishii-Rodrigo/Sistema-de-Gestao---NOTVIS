@@ -81,8 +81,8 @@
                 </div>
             </div>
             
-            {{-- Botão de Submissão --}}
-            <button type="submit" class="btn btn-success">
+            {{-- Botão de Submissão (Corrigido para w-100 para padronização) --}}
+            <button type="submit" class="btn btn-success w-100">
                 <i class="bi bi-plus-circle-fill"></i> Cadastrar Veículo
             </button>
 

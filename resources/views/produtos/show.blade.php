@@ -37,7 +37,7 @@
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item"><strong>Código:</strong> {{ $produto->codigo }}</li>
                     <li class="list-group-item"><strong>Nome:</strong> {{ $produto->nome }}</li>
-                    <li class="list-group-item"><strong>Unidade de Medida:</strong> {{ $produto->unidade_medida }}</li>
+                    <li class="list-group-item"><strong>Unidade de Medida:</strong> {{ $unidadesMap[$produto->unidade_medida] ?? $produto->unidade_medida }}</li>
                 </ul>
             </div>
             <div class="col-md-6 mb-4">
@@ -45,7 +45,8 @@
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item"><strong>Preço de Custo:</strong> R$ {{ number_format($produto->preco_custo, 2, ',', '.') }}</li>
                     <li class="list-group-item"><strong>Preço de Venda:</strong> R$ {{ number_format($produto->preco_venda, 2, ',', '.') }}</li>
-                    <li class="list-group-item"><strong>Estoque Mínimo:</strong> {{ $produto->estoque_minimo }}</li>
+                    {{-- 💡 CORRIGIDO: Mostra Estoque Atual no lugar do Estoque Mínimo --}}
+                    <li class="list-group-item"><strong>Estoque Atual:</strong> {{ $produto->estoque_atual }}</li>
                 </ul>
             </div>
         </div>

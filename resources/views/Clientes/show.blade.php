@@ -40,9 +40,12 @@
                     <li class="list-group-item"><strong>Nome/Razão Social:</strong> {{ $cliente->nome }}</li>
                     <li class="list-group-item"><strong>CPF/CNPJ:</strong> {{ $cliente->cpf_cnpj ?? 'Não informado' }}</li>
                     <li class="list-group-item"><strong>Telefone Fixo:</strong> {{ $cliente->telefone ?? 'Não informado' }}</li>
-                    <li class="list-group-item"><strong>Telefone Celular:</strong> {{ $cliente->telefone_celular ?? 'Não informado' }}</li> {{-- NOVO CAMPO --}}
+                    <li class="list-group-item"><strong>Telefone Celular:</strong> {{ $cliente->telefone_celular ?? 'Não informado' }}</li> 
                     <li class="list-group-item"><strong>E-mail:</strong> {{ $cliente->email ?? 'Não informado' }}</li>
+                    {{-- CORREÇÃO: Adiciona a data de nascimento formatada. --}}
                     <li class="list-group-item"><strong>Data de Nascimento:</strong>
+                        {{ $cliente->data_nascimento ? \Carbon\Carbon::parse($cliente->data_nascimento)->format('d/m/Y') : 'Não informada' }}
+                    </li>
                 </ul>
             </div>
 
@@ -64,9 +67,11 @@
 
         <div class="row text-muted small">
             <div class="col-md-6">
-                <strong>Criado em:</strong> 
+                {{-- CORREÇÃO: Adiciona a data de criação formatada. --}}
+                <strong>Criado em:</strong> {{ $cliente->created_at->format('d/m/Y H:i:s') }}
             </div>
             <div class="col-md-6">
+                {{-- CORREÇÃO: Data de atualização já estava correta, mas mantida. --}}
                 <strong>Última Atualização:</strong> {{ $cliente->updated_at->format('d/m/Y H:i:s') }}
             </div>
         </div>

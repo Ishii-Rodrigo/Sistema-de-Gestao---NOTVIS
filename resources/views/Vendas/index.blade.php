@@ -29,27 +29,23 @@
             </form>
         </div>
         
-        <a href="{{ route('vendas.create') }}" class="btn btn-sm btn-success" title="Iniciar Nova Venda">
-            <i class="bi bi-plus-circle-fill"></i> Nova Venda
+        <a href="{{ route('vendas.create') }}" class="btn btn-sm btn-success" title="Nova Venda/Orçamento">
+            <i class="bi bi-plus-circle-fill"></i> Nova Venda/Orçamento
         </a>
     </div>
 
-    @if (session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
-
-    @if ($vendas->isEmpty())
+    @if($vendas->isEmpty())
         <div class="alert alert-info">Nenhuma venda ou orçamento encontrado.</div>
     @else
         <div class="table-responsive">
-            <table class="table table-striped table-hover shadow-sm">
-                <thead class="table-dark">
+            <table class="table table-hover table-striped">
+                <thead>
                     <tr>
                         <th>ID</th>
                         <th>Data</th>
                         <th>Cliente</th>
-                        <th>Veículo</th>
-                        <th>Total Final</th>
+                        <th>Veículo (Placa)</th>
+                        <th>Total Final</th> {{-- Requisito 1: Coluna Total Final --}}
                         <th>Status</th>
                         <th>Ações</th>
                     </tr>
@@ -58,15 +54,17 @@
                     @foreach($vendas as $venda)
                         <tr>
                             <td>{{ $venda->id }}</td>
-                            <td>{{ $venda->created_at->format('d/m/Y') }}</td>
+                            <td>{{ $venda->data_venda->format('d/m/Y') }}</td>
                             <td>{{ $venda->cliente->nome ?? 'N/A' }}</td>
                             <td>{{ $venda->veiculo->placa ?? '-' }}</td>
-                            <td>R$ {{ number_format($venda->total_final, 2, ',', '.') }}</td>
+                            <td>R$ {{ number_format($venda->total_final, 2, ',', '.') }}</td> {{-- Requisito 1: Valor Final --}}
                             <td><span class="badge bg-{{ $venda->status == 'Finalizada' ? 'success' : 'warning' }}">{{ $venda->status }}</span></td>
                             <td>
+                                {{-- Requisito 2: Botão Ver Detalhes --}}
                                 <a href="{{ route('vendas.show', $venda->id) }}" class="btn btn-sm btn-info text-white" title="Ver Detalhes">
                                     <i class="bi bi-eye-fill"></i>
                                 </a>
+                                {{-- Requisito 3: Botão Editar Venda --}}
                                 <a href="{{ route('vendas.edit', $venda->id) }}" class="btn btn-sm btn-warning" title="Editar Venda">
                                     <i class="bi bi-pencil-square"></i>
                                 </a>

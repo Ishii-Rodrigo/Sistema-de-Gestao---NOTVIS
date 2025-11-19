@@ -12,27 +12,19 @@ class ProdutoController extends Controller
      */
     public function index(Request $request)
     {
-        // 1. Obtém o termo de busca da requisição
         $termo = $request->input('search');
         $query = Produto::query();
 
-        // 2. Lógica de pesquisa: Filtra APENAS por nome
         if ($termo) {
-            // CORREÇÃO: Pesquisa apenas pela coluna 'nome', removendo 'codigo'
             $query->where('nome', 'like', "%{$termo}%");
-            
-            /*
-             * NOTA: Se você realmente deseja pesquisar por "código", você deve
-             * primeiro garantir que a coluna 'codigo' exista na tabela 'produtos' 
-             * no seu banco de dados (via migração).
-             */
         }
 
-        // 3. Busca e ordena os produtos
         $produtos = $query->latest()->get(); 
         
-        // 4. Passa os produtos E o termo de pesquisa para a view
-        return view('produtos.index', compact('produtos', 'termo'));
+        // 💡 Adicionado: Mapeamento de unidades para exibição do nome por extenso
+        $unidadesMap = $this->getUnidadesMedida();
+        
+        return view('produtos.index', compact('produtos', 'termo', 'unidadesMap'));
     }
 
     /**
@@ -40,7 +32,9 @@ class ProdutoController extends Controller
      */
     public function create()
     {
-        return view('produtos.create');
+        // 💡 Adicionado: Passa as unidades de medida para a view
+        $unidades = $this->getUnidadesMedida();
+        return view('produtos.create', compact('unidades'));
     }
 
     /**
@@ -52,19 +46,22 @@ class ProdutoController extends Controller
         $request->validate([
             'nome' => 'required|max:255',
             'descricao' => 'required',
-            'unidade_medida' => 'required|max:10',
-            'preco_custo' => 'required|numeric',
-            'preco_venda' => 'required|numeric', 
-            'estoque_minimo' => 'required|integer|min:0',
-            // O campo 'codigo' foi removido da busca, mas se for usado no formulário, a validação fica aqui:
-            'codigo' => 'nullable|max:50|unique:produtos', 
+            // 💡 CORRIGIDO: Validação para aceitar apenas os códigos padronizados
+            'unidade_medida' => 'required|max:10|in:UN,LT,M,KG,CX', 
+            'preco_custo' => 'required|numeric|min:0',
+            'preco_venda' => 'required|numeric|min:0.01', 
+            'estoque_atual' => 'required|numeric|min:0', 
+            'estoque_minimo' => 'required|numeric|min:0', 
         ]);
         
-        // Cria o produto com os dados validados.
-        Produto::create($request->all());
+        $dados = $request->all();
+        // 💡 NOVO: Conversão do Nome para Maiúsculo (uso de mb_strtoupper para UTF-8)
+        $dados['nome'] = mb_strtoupper($dados['nome'], 'UTF-8');
+        
+        Produto::create($dados);
 
         return redirect()->route('produtos.index')
-            ->with('success', 'Produto cadastrado com sucesso!');
+            ->with('success', 'Produto criado com sucesso!');
     }
 
     /**
@@ -72,7 +69,9 @@ class ProdutoController extends Controller
      */
     public function show(Produto $produto)
     {
-        return view('produtos.show', compact('produto'));
+        // 💡 Adicionado: Mapeamento de unidades para exibição do nome por extenso
+        $unidadesMap = $this->getUnidadesMedida();
+        return view('produtos.show', compact('produto', 'unidadesMap'));
     }
 
     /**
@@ -80,7 +79,9 @@ class ProdutoController extends Controller
      */
     public function edit(Produto $produto)
     {
-        return view('produtos.edit', compact('produto'));
+        // 💡 Adicionado: Passa as unidades de medida para a view
+        $unidades = $this->getUnidadesMedida();
+        return view('produtos.edit', compact('produto', 'unidades'));
     }
 
     /**
@@ -92,16 +93,20 @@ class ProdutoController extends Controller
         $request->validate([
             'nome' => 'required|max:255',
             'descricao' => 'required',
-            'unidade_medida' => 'required|max:10',
+            // 💡 CORRIGIDO: Validação para aceitar apenas os códigos padronizados
+            'unidade_medida' => 'required|max:10|in:UN,LT,M,KG,CX',
             'preco_custo' => 'required|numeric',
             'preco_venda' => 'required|numeric', 
-            'estoque_minimo' => 'required|integer|min:0',
-            // Validação para 'codigo'
+            'estoque_atual' => 'required|numeric|min:0',
+            'estoque_minimo' => 'required|numeric|min:0',
             'codigo' => 'nullable|max:50|unique:produtos,codigo,' . $produto->id,
         ]);
         
-        // Atualiza o produto com os dados validados.
-        $produto->update($request->all());
+        $dados = $request->all();
+        // 💡 NOVO: Conversão do Nome para Maiúsculo (uso de mb_strtoupper para UTF-8)
+        $dados['nome'] = mb_strtoupper($dados['nome'], 'UTF-8');
+        
+        $produto->update($dados);
 
         return redirect()->route('produtos.index')
             ->with('success', 'Produto atualizado com sucesso!');
@@ -116,5 +121,19 @@ class ProdutoController extends Controller
 
         return redirect()->route('produtos.index')
             ->with('success', 'Produto excluído com sucesso!');
+    }
+    
+    /**
+     * Método auxiliar para fornecer a lista de unidades de medida padronizadas.
+     */
+    private function getUnidadesMedida()
+    {
+        return [
+            'UN' => 'Unidade', 
+            'LT' => 'Litro', 
+            'M' => 'Metro', 
+            'KG' => 'Quilograma', 
+            'CX' => 'Caixa'
+        ];
     }
 }
