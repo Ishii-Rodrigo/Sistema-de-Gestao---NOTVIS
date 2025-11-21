@@ -33,7 +33,6 @@
                     <input name="nome" id="nome" type="text" class="form-control" value="{{ old('nome', $produto->nome) }}" required/>
                 </div>
                 
-                {{-- 💡 CORRIGIDO: Campo Unidade de Medida como SELECT (Lista Suspensa) --}}
                 <div class="col-md-6 form-group">
                     <label for="unidade_medida" class="form-label">Unidade de Medida (*)</label>
                     <select name="unidade_medida" id="unidade_medida" class="form-control" required>
@@ -49,8 +48,7 @@
                     </select>
                 </div>
             </div>
-            
-            {{-- Linha de Preços e Estoque (Dividida em 4 colunas) --}}
+           
             <div class="row mb-3">
                 <div class="col-md-3 form-group">
                     <label for="preco_custo" class="form-label">Preço de Custo (*)</label>
@@ -61,7 +59,6 @@
                     <input name="preco_venda" id="preco_venda" type="number" step="0.01" class="form-control" value="{{ old('preco_venda', $produto->preco_venda) }}" required/>
                 </div>
                 
-                {{-- ➡️ CAMPO CORRIGIDO: ESTOQUE ATUAL --}}
                 <div class="col-md-3 form-group">
                     <label for="estoque_atual" class="form-label">Estoque Atual (*)</label>
                     <input name="estoque_atual" 
@@ -73,7 +70,6 @@
                            required/>
                 </div>
                 
-                {{-- CAMPO ORIGINAL: ESTOQUE MÍNIMO --}}
                 <div class="col-md-3 form-group">
                     <label for="estoque_minimo" class="form-label">Estoque Mínimo (*)</label>
                     <input name="estoque_minimo" id="estoque_minimo" type="number" step="0.01" class="form-control" value="{{ old('estoque_minimo', $produto->estoque_minimo) }}" required/>

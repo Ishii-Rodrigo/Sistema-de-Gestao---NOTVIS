@@ -2,15 +2,13 @@
 
 @section('title', 'Menu Principal - NOTVIS')
 
-{{-- Remove o cabeçalho secundário padrão (Header) --}}
 @section('header', '')
 
 @section('styles')
 <style>
-    /* Estilos para o conteúdo principal */
     main {
-        padding-top: 50px !important; /* Aumenta o padding superior para centralizar melhor */
-        padding-bottom: 50px !important; /* Aumenta o padding inferior */
+        padding-top: 50px !important; 
+        padding-bottom: 50px !important;
     }
     .card-module {
         transition: transform 0.2s, box-shadow 0.2s;

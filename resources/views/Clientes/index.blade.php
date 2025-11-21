@@ -19,13 +19,13 @@
         </div>
         
         <div class="d-flex">
-            {{-- FORMULÁRIO DE BUSCA --}}
+          
             <form action="{{ route('clientes.index') }}" method="GET" class="d-flex me-3">
                 <input type="text" 
                        name="search" 
                        class="form-control form-control-sm" 
                        placeholder="Buscar por Nome, Email, CPF..."
-                       value="{{ $termo ?? '' }}" {{-- Garante que o termo buscado permaneça no input --}}
+                       value="{{ $termo ?? '' }}"
                        style="width: 250px;">
                        
                 <button type="submit" class="btn btn-sm btn-secondary ms-2" title="Pesquisar Clientes">
@@ -39,7 +39,6 @@
         </div>
     </div>
     
-    {{-- MENSAGEM DE SUCESSO DO CRUD (se estiver no layout app.blade.php, pode remover daqui) --}}
     @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session('success') }}
@@ -47,7 +46,6 @@
         </div>
     @endif
     
-    {{-- EXIBIÇÃO DO RESULTADO DA BUSCA E BOTÃO LIMPAR BUSCA --}}
     @if (!empty($termo))
         <div class="alert alert-info d-flex justify-content-between align-items-center">
             <span class="fw-bold">
@@ -76,10 +74,10 @@
                         <th>ID</th>
                         <th>Nome/Razão Social</th>
                         <th>E-mail</th>
-                        <th>Telefone/Celular</th>
-                        <th>CPF/CNPJ</th>
+                        <th style="padding-right: 60px;">Telefone/Celular</th>
+                        <th style="padding-right: 60px;">CPF/CNPJ</th>
                         <th>Endereço Principal</th>
-                        <th style="width: 150px;">Ações</th>
+                        <th style="width: 130px;">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -92,7 +90,6 @@
                             <td>{{ $cliente->cpf_cnpj ?? '-' }}</td>
                             <td>{{ $cliente->rua ?? '-' }}, {{ $cliente->numero ?? 'S/N' }} - {{ $cliente->cidade ?? '-' }}/{{ $cliente->estado ?? '-' }}</td>
                             
-                            {{-- BOTÕES DE AÇÃO --}}
                             <td>
                                 <a href="{{ route('clientes.show', $cliente->id) }}" class="btn btn-sm btn-info text-white" title="Ver Detalhes">
                                     <i class="bi bi-eye-fill"></i>

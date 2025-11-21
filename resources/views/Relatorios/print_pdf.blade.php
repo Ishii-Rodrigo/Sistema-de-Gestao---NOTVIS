@@ -53,7 +53,6 @@
         Período: {{ date('d/m/Y', strtotime($data_inicio)) }} a {{ date('d/m/Y', strtotime($data_fim)) }}
     </div>
 
-    {{-- 1. Tratamento para Relatório de Faturamento --}}
     @if ($relatorio == 'faturamento' && $resultados)
         <div class="resumo">
             <p>Total de Vendas: {{ $resultados->total_vendas }}</p>
@@ -61,7 +60,6 @@
         </div>
     @endif
     
-    {{-- 2. Tratamento para Relatório de Produtos Mais Vendidos --}}
     @if ($relatorio == 'produtos-vendidos' && $resultados && $resultados->count() > 0)
         <table>
             <thead>
@@ -87,8 +85,6 @@
         </table>
     @endif
 
-    {{-- 3. NOVO BLOCO CORRIGIDO: Tratamento para Margem de Lucro --}}
-    {{-- O controller retorna um objeto de resumo para este relatório. --}}
     @if ($relatorio == 'margem-lucro' && $resultados)
         <div class="resumo">
             <h2>Resumo da Margem de Lucro</h2>

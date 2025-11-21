@@ -74,10 +74,6 @@
                 </div>
             </div>
 
-            {{-- ----------------------------------------------------- --}}
-            {{-- BLOCO DE ITENS (ESTRUTURA JAVASCRIPT) --}}
-            {{-- ----------------------------------------------------- --}}
-
             <div class="p-3 mb-4 border rounded bg-light" id="itens-container">
                 <h5 class="text-info mb-3">Itens / Serviços</h5>
                 <div class="table-responsive">
@@ -92,7 +88,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- Carrega itens existentes da venda ou old() --}}
+                          
                             @php $item_index = 0; @endphp
                             @if (old('itens'))
                                 @foreach (old('itens') as $item)
@@ -104,7 +100,6 @@
                                 @endforeach
                             @endif
                             
-                            {{-- Garante que haja pelo menos uma linha se a venda for nova e vazia --}}
                             @if ($item_index === 0)
                                 @include('vendas.partials.item_row', ['produtos' => $produtos, 'item' => null, 'index' => 0])
                                 @php $item_index = 1; @endphp
@@ -156,19 +151,14 @@
     </div>
 </div>
 
-{{-- ------------------------------------------------------------------- --}}
-{{-- NOVO BLOCO SCRIPT PARA CARREGAMENTO DINÂMICO DE VEÍCULOS --}}
-{{-- ------------------------------------------------------------------- --}}
 @section('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const clienteSelect = document.getElementById('cliente_id');
         const veiculoSelect = document.getElementById('veiculo_id');
 
-        // URL da API usando a rota nomeada do Laravel (é necessário ter a rota 'api.veiculos.cliente' configurada em web.php!)
         const apiUrlTemplate = "{{ route('api.veiculos.cliente', ['clienteId' => '__cliente_id__']) }}";
 
-        // Variável com o ID do veículo a ser selecionado (se houver old, usa old; senão, usa o da venda)
         const oldVeiculoId = "{{ old('veiculo_id', $venda->veiculo_id ?? '') }}";
 
         function carregarVeiculosDoCliente(clienteId, selectedVeiculoId = null) {
@@ -197,7 +187,6 @@
                             option.value = veiculo.id;
                             option.textContent = `${veiculo.placa} - ${veiculo.modelo || 'Sem Modelo'}`;
                             
-                            // Seleciona o veículo se ele for o antigo (venda existente ou old)
                             if (veiculo.id == selectedVeiculoId) {
                                 option.selected = true;
                             }
@@ -214,20 +203,15 @@
                 });
         }
 
-        // Listener para o evento de mudança do cliente
         clienteSelect.addEventListener('change', function() {
-            // Ao mudar o cliente, carregamos os veículos sem pré-selecionar o oldVeiculoId
             carregarVeiculosDoCliente(this.value);
         });
         
-        // Inicialização: Carrega veículos na primeira vez que a página é carregada, usando o ID do cliente e o Veículo ID da Venda
         const initialClienteId = clienteSelect.value;
         if (initialClienteId) {
              carregarVeiculosDoCliente(initialClienteId, oldVeiculoId);
         }
 
-        // ... (Seu código JavaScript de cálculo de itens e totais deve vir aqui) ...
-        // Este código foi omitido para focar na correção do Veículo.
     });
 </script>
 @endsection

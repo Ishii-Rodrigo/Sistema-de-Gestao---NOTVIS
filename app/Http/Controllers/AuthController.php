@@ -19,17 +19,14 @@ class AuthController extends Controller
         ], [
             'email.required' => 'O campo e-mail é obrigatório',
             'email.email' => 'Digite um email valido',
-            // CORREÇÃO APLICADA AQUI: Mudando a chave para 'password.required'
             'password.required' => 'O campo senha é obrigatório'
         ]);
 
         if(Auth::attempt($credentials)){
             $request->session()->regenerate();
-            // Redireciona para a home (Menu Principal) após o login
             return redirect()->intended('/home');
         }
 
-        // CORREÇÃO APLICADA AQUI: A mensagem de erro de credenciais é mais descritiva
         return back()->withErrors([
             'email' => 'Credenciais inválidas. Verifique seu e-mail e senha.'
         ])->onlyInput('email');
@@ -41,9 +38,7 @@ class AuthController extends Controller
         
         Auth::logout();
         $request->session()->invalidate();
-        $request->session()->regenerateToken(); // Uso de regenerateToken é a prática mais segura
-        
-        // Redireciona para a rota de login nomeada 'login'
+        $request->session()->regenerateToken(); 
         return redirect()->route('login');
     }
 }

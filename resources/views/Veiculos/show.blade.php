@@ -11,7 +11,7 @@
         <h2 class="text-primary mb-4">Detalhes do Veículo (Placa: {{ $veiculo->placa }})</h2>
 
         <div class="mb-4 d-flex justify-content-between">
-            {{-- CORREÇÃO: Botão "Voltar" padronizado --}}
+
             <a href="{{ route('veiculos.index') }}" class="btn btn-sm btn-outline-primary" title="Voltar para a Lista">
                 <i class="bi bi-arrow-left-circle-fill"></i> Voltar para a Lista
             </a>
@@ -48,7 +48,6 @@
                 </ul>
             </div>
 
-            {{-- Coluna de Detalhes do Cliente --}}
             <div class="col-md-6 mb-4">
                 <h4 class="text-info mb-3">Informações do Proprietário</h4>
                 @if ($veiculo->cliente)

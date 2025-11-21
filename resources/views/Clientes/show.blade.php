@@ -67,11 +67,9 @@
 
         <div class="row text-muted small">
             <div class="col-md-6">
-                {{-- CORREÇÃO: Adiciona a data de criação formatada. --}}
                 <strong>Criado em:</strong> {{ $cliente->created_at->format('d/m/Y H:i:s') }}
             </div>
             <div class="col-md-6">
-                {{-- CORREÇÃO: Data de atualização já estava correta, mas mantida. --}}
                 <strong>Última Atualização:</strong> {{ $cliente->updated_at->format('d/m/Y H:i:s') }}
             </div>
         </div>

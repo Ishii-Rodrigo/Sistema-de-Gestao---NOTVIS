@@ -4,20 +4,17 @@
 
 @section('styles')
     <style>
-        /* 1. CSS para Forçar Tamanho A5 e Otimizar Espaço */
+        
         @page {
-            /* Define o tamanho da página como A5 (148mm x 210mm) */
             size: A5; 
-            /* Margens mínimas para aproveitar o espaço */
             margin: 5mm; 
         }
 
         body {
             font-family: Arial, sans-serif;
-            font-size: 9pt; /* Reduz o tamanho da fonte */
+            font-size: 9pt;
         }
 
-        /* Títulos e Espaçamento */
         .container {
             width: 100%;
             padding: 0;
@@ -29,55 +26,50 @@
             padding: 0;
         }
 
-        /* Border e Padding das Seções */
         .header-section, .info-section, .items-section, .totals-section {
             border: 1px solid #ccc;
             margin-bottom: 5px;
-            padding: 3px; /* Reduz o padding interno */
-            page-break-inside: avoid; /* Evita que seções grandes sejam divididas */
+            padding: 3px; 
+            page-break-inside: avoid;
         }
         
         .info-section table td {
              font-size: 8.5pt;
         }
 
-
-        /* Detalhes da Tabela de Itens */
         .table-items {
             width: 100%;
             border-collapse: collapse;
         }
         .table-items th, .table-items td {
             border: 1px solid #ddd;
-            padding: 2px 4px; /* Padding mínimo */
-            font-size: 8pt; /* Fonte ainda menor para os itens */
+            padding: 2px 4px; 
+            font-size: 8pt; 
         }
         .table-items th {
             text-align: left;
             background-color: #f0f0f0;
         }
 
-        /* Coluna de Totais */
         .totals-section {
-            overflow: hidden; /* Garante que o float seja contido */
+            overflow: hidden; 
         }
         .totals-table {
             float: right;
-            width: 45%; /* Aumenta um pouco para caber no A5 */
+            width: 45%; 
             margin-top: 5px;
         }
+
         .totals-table td {
             padding: 2px 0;
             font-size: 9pt;
         }
         
-        /* Observações */
         .observacoes-content {
             font-size: 7.5pt; 
-            min-height: 15mm; /* Garante um espaço mínimo */
+            min-height: 15mm; 
         }
         
-        /* Limpa o float para o container principal */
         .clearfix::after {
             content: "";
             clear: both;
@@ -138,7 +130,6 @@
                             <td style="text-align: right;">R$ {{ number_format($item->total_item, 2, ',', '.') }}</td>
                         </tr>
                     @endforeach
-                    {{-- ADICIONA LINHAS VAZIAS SE HOUVER POUCOS ITENS PARA PREENCHER O ESPAÇO --}}
                     @for ($i = $venda->itens->count(); $i < 4; $i++)
                         <tr><td colspan="4" style="padding: 4px 4px; color: #ddd;">&nbsp;</td></tr>
                     @endfor
@@ -148,7 +139,6 @@
 
         <div class="totals-section clearfix">
             
-            {{-- Tabela de Totais (Flutuando à direita) --}}
             <table class="totals-table">
                 <tr>
                     <td>Subtotal (Itens):</td>
@@ -164,7 +154,6 @@
                 </tr>
             </table>
             
-            {{-- Observações (Ocupando o espaço restante) --}}
             <div style="margin-right: 50%; padding-top: 5px;">
                 <h6 style="border-bottom: 1px solid #eee;">Observações</h6>
                 <div class="observacoes-content">

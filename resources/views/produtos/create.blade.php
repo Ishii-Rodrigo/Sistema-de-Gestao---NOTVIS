@@ -31,7 +31,6 @@
                     <input name="nome" id="nome" type="text" class="form-control" value="{{ old('nome') }}" required/>
                 </div>
                 
-                {{-- 💡 CORRIGIDO: Campo Unidade de Medida como SELECT (Lista Suspensa) --}}
                 <div class="col-md-6 form-group">
                     <label for="unidade_medida" class="form-label">Unidade de Medida (*)</label>
                     <select name="unidade_medida" id="unidade_medida" class="form-control" required>
@@ -48,7 +47,6 @@
                 </div>
             </div>
             
-            {{-- Linha de Preços e Estoque --}}
             <div class="row mb-3">
                 <div class="col-md-3 form-group">
                     <label for="preco_custo" class="form-label">Preço de Custo (*)</label>
@@ -59,7 +57,6 @@
                     <input name="preco_venda" id="preco_venda" type="number" step="0.01" class="form-control" value="{{ old('preco_venda') }}" required/>
                 </div>
                 
-                {{-- ➡️ CAMPO CORRIGIDO: ESTOQUE ATUAL --}}
                 <div class="col-md-3 form-group">
                     <label for="estoque_atual" class="form-label">Estoque Atual (Inicial) (*)</label>
                     <input name="estoque_atual" id="estoque_atual" type="number" step="0.01" class="form-control" value="{{ old('estoque_atual', 0.00) }}" required/>

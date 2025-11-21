@@ -45,7 +45,7 @@
                         <th>Data</th>
                         <th>Cliente</th>
                         <th>Veículo (Placa)</th>
-                        <th>Total Final</th> {{-- Requisito 1: Coluna Total Final --}}
+                        <th>Total Final</th>
                         <th>Status</th>
                         <th>Ações</th>
                     </tr>
@@ -57,14 +57,12 @@
                             <td>{{ $venda->data_venda->format('d/m/Y') }}</td>
                             <td>{{ $venda->cliente->nome ?? 'N/A' }}</td>
                             <td>{{ $venda->veiculo->placa ?? '-' }}</td>
-                            <td>R$ {{ number_format($venda->total_final, 2, ',', '.') }}</td> {{-- Requisito 1: Valor Final --}}
+                            <td>R$ {{ number_format($venda->total_final, 2, ',', '.') }}</td>
                             <td><span class="badge bg-{{ $venda->status == 'Finalizada' ? 'success' : 'warning' }}">{{ $venda->status }}</span></td>
                             <td>
-                                {{-- Requisito 2: Botão Ver Detalhes --}}
                                 <a href="{{ route('vendas.show', $venda->id) }}" class="btn btn-sm btn-info text-white" title="Ver Detalhes">
                                     <i class="bi bi-eye-fill"></i>
                                 </a>
-                                {{-- Requisito 3: Botão Editar Venda --}}
                                 <a href="{{ route('vendas.edit', $venda->id) }}" class="btn btn-sm btn-warning" title="Editar Venda">
                                     <i class="bi bi-pencil-square"></i>
                                 </a>

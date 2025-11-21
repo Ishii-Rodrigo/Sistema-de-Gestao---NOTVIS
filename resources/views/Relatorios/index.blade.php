@@ -8,8 +8,6 @@
 
 @section('content')
 <div class="container-fluid">
-    {{-- Formulário de Filtros (Área Superior e Lateral) --}}
-    {{-- O formulário usa o método GET para manter os filtros na URL --}}
     <form action="{{ route('relatorios.index') }}" method="GET" id="form-relatorio">
         <div class="card mb-4 shadow">
             <div class="card-header bg-primary text-white">
@@ -17,7 +15,6 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    {{-- 2. Opções Suspensas de Relatórios --}}
                     <div class="col-md-3">
                         <div class="form-group">
                             <label for="tipo_relatorio">Selecione o Relatório</label>
@@ -28,8 +25,7 @@
                             </select>
                         </div>
                     </div>
-                    
-                    {{-- 1. Filtros de Data --}}
+                 
                     <div class="col-md-3">
                         <div class="form-group">
                             <label for="periodo_rapido">Seleção Rápida</label>
@@ -70,14 +66,12 @@
     @if ($resultados)
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h4>Resultado para o período de {{ Carbon\Carbon::parse($data_inicio)->format('d/m/Y') }} a {{ Carbon\Carbon::parse($data_fim)->format('d/m/Y') }}</h4>
-        
-        {{-- 3. Botão para exportar relatório (PDF) --}}
+       
         <a href="{{ route('relatorios.exportPdf', request()->query()) }}" class="btn btn-danger">
             <i class="fas fa-file-pdf"></i> Imprimir (PDF)
         </a>
     </div>
 
-    {{-- Área Principal: Exibição dos Resultados em Tabela --}}
     <div class="card shadow mb-4">
         <div class="card-body">
             
@@ -85,7 +79,6 @@
                 <div class="alert alert-warning">{{ session('info') }}</div>
             @endif
 
-            {{-- 1. Faturamento por Período --}}
             @if ($relatorio == 'faturamento' && $resultados)
                 <h5>Faturamento por Período</h5>
                 <table class="table table-bordered table-striped">
@@ -109,7 +102,6 @@
                 </table>
             @endif
             
-            {{-- 2. Produtos Mais Vendidos --}}
             @if ($relatorio == 'produtos-vendidos' && $resultados && $resultados->count() > 0)
                 <h5>Produtos Mais Vendidos (em Quantidade)</h5>
                 <table class="table table-bordered table-striped">
@@ -136,7 +128,6 @@
                 <div class="alert alert-info">Nenhuma venda de produto/serviço encontrada no período.</div>
             @endif
             
-            {{-- 3. Margem de Lucro Bruta --}}
             @if ($relatorio == 'margem-lucro' && $resultados)
                 <h5>Margem de Lucro Bruta</h5>
                 <table class="table table-bordered table-striped">

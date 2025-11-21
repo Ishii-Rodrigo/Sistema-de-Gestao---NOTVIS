@@ -9,14 +9,13 @@
 
         <h2 class="text-primary mb-4">Venda/Orçamento #{{ $venda->id }}</h2>
 
-        {{-- Botões de Ação (Linha 20, onde estava o erro) --}}
         <div class="mb-4 d-flex justify-content-between">
             <a href="{{ route('vendas.index') }}" class="btn btn-sm btn-outline-primary" title="Voltar para a Lista">
                 <i class="bi bi-arrow-left-circle-fill"></i> Voltar para a Lista
             </a>
             
             <div class="d-flex">
-                {{-- Botão Imprimir que AGORA aponta corretamente para a rota 'vendas.print' --}}
+               
                 <a href="{{ route('vendas.print', $venda->id) }}" target="_blank" class="btn btn-sm btn-info text-white me-2" title="Imprimir/PDF">
                     <i class="bi bi-printer-fill"></i> Imprimir
                 </a>
@@ -36,7 +35,6 @@
         
         <hr>
         
-        {{-- Dados da Venda --}}
         <div class="p-3 mb-4 border rounded bg-light">
             <h5 class="text-info mb-3">Informações da Venda</h5>
             <div class="row">
@@ -49,7 +47,6 @@
             </div>
         </div>
 
-        {{-- Dados do Cliente --}}
         <div class="p-3 mb-4 border rounded">
             <h5 class="text-info mb-3">Dados do Cliente</h5>
             @php
@@ -69,7 +66,6 @@
             @endif
         </div>
         
-        {{-- Lista de Itens/Serviços --}}
         <div class="p-3 mb-4 border rounded bg-light">
             <h5 class="text-info mb-3">Itens/Serviços Vendidos</h5>
             <div class="table-responsive">
@@ -100,7 +96,6 @@
             </div>
         </div>
 
-        {{-- Totais e Observações --}}
         <div class="p-3 mb-4 border rounded">
             <h5 class="text-info mb-3">Resumo Financeiro</h5>
             <div class="row justify-content-end">

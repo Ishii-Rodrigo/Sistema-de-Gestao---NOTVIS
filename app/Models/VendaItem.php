@@ -10,7 +10,6 @@ class VendaItem extends Model
 {
     use HasFactory;
     
-    // Nome da tabela (assumindo que seja 'venda_items')
     protected $table = 'venda_items'; 
 
     protected $fillable = [
@@ -21,25 +20,16 @@ class VendaItem extends Model
         'total_item',      
     ];
 
-    /**
-     * Define o relacionamento BelongsTo com a Venda.
-     */
     public function venda(): BelongsTo
     {
         return $this->belongsTo(Venda::class);
     }
 
-    /**
-     * Define o relacionamento BelongsTo com o Produto.
-     */
     public function produto(): BelongsTo
     {
         return $this->belongsTo(Produto::class);
     }
 
-    /**
-     * Conversão de tipos (casting) para garantir que os valores sejam numéricos.
-     */
     protected $casts = [
         'quantidade' => 'decimal:2',
         'preco_unitario' => 'decimal:2',
